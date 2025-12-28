@@ -151,7 +151,7 @@ function ExpertEvaluateContent() {
       <Layout>
         <div className="container mx-auto px-4 py-8">
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto"></div>
             <p className="mt-4 text-gray-600 font-arabic">{t.common.loading}</p>
           </div>
         </div>
@@ -177,7 +177,7 @@ function ExpertEvaluateContent() {
         <div className="container mx-auto px-4 py-8">
           <Link
             to="/expert/dashboard"
-            className={`flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-6 font-arabic ${isRTL ? 'flex-row-reverse' : ''}`}
+            className={`flex items-center gap-2 text-primary-500 hover:text-primary-600 mb-6 font-arabic ${isRTL ? 'flex-row-reverse' : ''}`}
           >
             <ArrowLeft className={`w-5 h-5 ${isRTL ? 'rotate-180' : ''}`} />
             {t.common.back}
@@ -213,7 +213,7 @@ function ExpertEvaluateContent() {
                   <div>
                     <div className={`flex items-center justify-between mb-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
                       <label className="text-lg font-semibold font-arabic">{t.evaluations.head}</label>
-                      <span className="text-2xl font-bold text-blue-600">{headScore}</span>
+                      <span className="text-2xl font-bold text-primary-500">{headScore}</span>
                     </div>
                     <input
                       type="range"
@@ -298,14 +298,14 @@ function ExpertEvaluateContent() {
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
                       rows={4}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-arabic"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-arabic"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed font-arabic text-lg font-semibold"
+                    className="w-full bg-primary-500 text-white py-3 rounded-lg hover:bg-primary-600 transition disabled:opacity-50 disabled:cursor-not-allowed font-arabic text-lg font-semibold"
                   >
                     {submitting ? t.common.loading : t.expert.submitEvaluation}
                   </button>
@@ -319,7 +319,7 @@ function ExpertEvaluateContent() {
                   </h2>
 
                   <div className="text-center mb-6">
-                    <div className="inline-flex items-center justify-center w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white mb-4">
+                    <div className="inline-flex items-center justify-center w-32 h-32 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 text-white mb-4">
                       <span className="text-5xl font-bold">{overallScore}</span>
                     </div>
                     <p className="text-gray-600 font-arabic">{t.evaluations.overallScore}</p>

@@ -48,7 +48,7 @@ function CamelsListContent() {
       <Layout>
         <div className="container mx-auto px-4 py-8">
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto"></div>
             <p className="mt-4 text-gray-600 font-arabic">{t.common.loading}</p>
           </div>
         </div>
@@ -64,7 +64,7 @@ function CamelsListContent() {
             <h1 className="text-4xl font-bold font-arabic">{t.camels.myCamels}</h1>
             <Link
               to="/camels/new"
-              className={`flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition font-arabic ${isRTL ? 'flex-row-reverse' : ''}`}
+              className={`flex items-center gap-2 bg-primary-500 text-white px-6 py-3 rounded-lg hover:bg-primary-600 transition font-arabic ${isRTL ? 'flex-row-reverse' : ''}`}
             >
               <Plus className="w-5 h-5" />
               {t.camels.addCamel}
@@ -76,7 +76,7 @@ function CamelsListContent() {
               <p className="text-gray-600 mb-6 text-lg font-arabic">{t.dashboard.noCamels}</p>
               <Link
                 to="/camels/new"
-                className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition font-arabic"
+                className="inline-block bg-primary-500 text-white px-8 py-3 rounded-lg hover:bg-primary-600 transition font-arabic"
               >
                 {t.dashboard.addFirstCamel}
               </Link>
@@ -107,7 +107,7 @@ function CamelsListContent() {
                   <div className={`flex gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
                     <Link
                       to={`/camels/${camel.id}`}
-                      className="flex-1 flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition font-arabic"
+                      className="flex-1 flex items-center justify-center gap-2 bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition font-arabic"
                     >
                       <Eye className="w-4 h-4" />
                       {t.camels.viewDetails}

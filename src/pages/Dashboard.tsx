@@ -62,7 +62,7 @@ export function Dashboard() {
       <Layout>
         <div className="container mx-auto px-4 py-8">
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto"></div>
             <p className="mt-4 text-gray-600 font-arabic">{t.common.loading}</p>
           </div>
         </div>
@@ -88,10 +88,10 @@ export function Dashboard() {
               <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
                 <div className={isRTL ? 'text-right' : 'text-left'}>
                   <p className="text-gray-600 font-arabic">{t.dashboard.totalCamels}</p>
-                  <p className="text-3xl font-bold text-blue-600">{totalCamels}</p>
+                  <p className="text-3xl font-bold text-primary-500">{totalCamels}</p>
                 </div>
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                  <TrendingUp className="w-6 h-6 text-blue-600" />
+                <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
+                  <TrendingUp className="w-6 h-6 text-primary-500" />
                 </div>
               </div>
             </div>
@@ -126,7 +126,7 @@ export function Dashboard() {
               <h2 className="text-2xl font-bold font-arabic">{t.dashboard.recentCamels}</h2>
               <Link
                 to="/camels/new"
-                className={`flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition font-arabic ${isRTL ? 'flex-row-reverse' : ''}`}
+                className={`flex items-center gap-2 bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition font-arabic ${isRTL ? 'flex-row-reverse' : ''}`}
               >
                 <Plus className="w-5 h-5" />
                 {t.camels.addCamel}
@@ -138,7 +138,7 @@ export function Dashboard() {
                 <p className="text-gray-600 mb-4 font-arabic">{t.dashboard.noCamels}</p>
                 <Link
                   to="/camels/new"
-                  className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition font-arabic"
+                  className="inline-block bg-primary-500 text-white px-6 py-3 rounded-lg hover:bg-primary-600 transition font-arabic"
                 >
                   {t.dashboard.addFirstCamel}
                 </Link>
@@ -166,7 +166,7 @@ export function Dashboard() {
                         </div>
                         {latestScore !== null && (
                           <div className="text-center">
-                            <p className="text-2xl font-bold text-blue-600">{latestScore}</p>
+                            <p className="text-2xl font-bold text-primary-500">{latestScore}</p>
                             <p className="text-xs text-gray-500 font-arabic">{t.evaluations.overallScore}</p>
                           </div>
                         )}
@@ -176,7 +176,7 @@ export function Dashboard() {
                 })}
                 <Link
                   to="/camels"
-                  className="block text-center text-blue-600 hover:text-blue-700 py-2 font-arabic"
+                  className="block text-center text-primary-500 hover:text-primary-600 py-2 font-arabic"
                 >
                   {t.dashboard.viewAll}
                 </Link>

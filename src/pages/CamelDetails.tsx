@@ -106,7 +106,7 @@ function CamelDetailsContent() {
       <Layout>
         <div className="container mx-auto px-4 py-8">
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto"></div>
             <p className="mt-4 text-gray-600 font-arabic">{t.common.loading}</p>
           </div>
         </div>
@@ -130,7 +130,7 @@ function CamelDetailsContent() {
         <div className="container mx-auto px-4 py-8">
           <Link
             to="/camels"
-            className={`flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-6 font-arabic ${isRTL ? 'flex-row-reverse' : ''}`}
+            className={`flex items-center gap-2 text-primary-500 hover:text-primary-600 mb-6 font-arabic ${isRTL ? 'flex-row-reverse' : ''}`}
           >
             <ArrowLeft className={`w-5 h-5 ${isRTL ? 'rotate-180' : ''}`} />
             {t.common.back}
@@ -181,7 +181,7 @@ function CamelDetailsContent() {
                       disabled={uploading}
                       className="hidden"
                     />
-                    <span className={`flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition cursor-pointer disabled:opacity-50 font-arabic ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <span className={`flex items-center justify-center gap-2 bg-primary-500 text-white px-6 py-3 rounded-lg hover:bg-primary-600 transition cursor-pointer disabled:opacity-50 font-arabic ${isRTL ? 'flex-row-reverse' : ''}`}>
                       <Upload className="w-5 h-5" />
                       {uploading ? t.common.loading : t.camels.uploadImage}
                     </span>
@@ -237,9 +237,9 @@ function CamelDetailsContent() {
                           </div>
 
                           <div className={`grid grid-cols-2 md:grid-cols-3 gap-4 mb-4`}>
-                            <div className={`text-center p-3 bg-blue-50 rounded-lg`}>
+                            <div className={`text-center p-3 bg-primary-50 rounded-lg`}>
                               <p className="text-sm text-gray-600 font-arabic">{t.evaluations.overallScore}</p>
-                              <p className="text-2xl font-bold text-blue-600">{evaluation.overall_score}</p>
+                              <p className="text-2xl font-bold text-primary-500">{evaluation.overall_score}</p>
                             </div>
                             <div className={`text-center p-3 bg-gray-50 rounded-lg`}>
                               <p className="text-sm text-gray-600 font-arabic">{t.evaluations.head}</p>
@@ -265,7 +265,7 @@ function CamelDetailsContent() {
 
                           <Link
                             to={`/evaluations/${evaluation.id}`}
-                            className={`mt-4 inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition font-arabic`}
+                            className={`mt-4 inline-block bg-primary-500 text-white px-6 py-2 rounded-lg hover:bg-primary-600 transition font-arabic`}
                           >
                             {t.evaluations.viewFullReport}
                           </Link>

@@ -44,7 +44,7 @@ function CamelAnalyticsContent() {
       <Layout>
         <div className="container mx-auto px-4 py-8">
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto"></div>
             <p className="mt-4 text-gray-600 font-arabic">{t.common.loading}</p>
           </div>
         </div>
@@ -151,8 +151,8 @@ function CamelAnalyticsContent() {
 
         <polygon
           points={points.map((p) => `${p.x},${p.y}`).join(' ')}
-          fill="rgba(59, 130, 246, 0.3)"
-          stroke="rgb(59, 130, 246)"
+          fill="rgba(139, 92, 246, 0.3)"
+          stroke="rgb(139, 92, 246)"
           strokeWidth="2"
         />
 
@@ -162,7 +162,7 @@ function CamelAnalyticsContent() {
             cx={point.x}
             cy={point.y}
             r="4"
-            fill="rgb(59, 130, 246)"
+            fill="rgb(139, 92, 246)"
           />
         ))}
       </svg>
@@ -175,7 +175,7 @@ function CamelAnalyticsContent() {
         <div className="container mx-auto px-4 py-8">
           <Link
             to={`/camels/${id}`}
-            className={`flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-6 font-arabic ${isRTL ? 'flex-row-reverse' : ''}`}
+            className={`flex items-center gap-2 text-primary-500 hover:text-primary-600 mb-6 font-arabic ${isRTL ? 'flex-row-reverse' : ''}`}
           >
             <ArrowLeft className={`w-5 h-5 ${isRTL ? 'rotate-180' : ''}`} />
             {t.common.back}
@@ -191,12 +191,12 @@ function CamelAnalyticsContent() {
           <div className="grid md:grid-cols-4 gap-6 mb-8">
             <div className="bg-white p-6 rounded-xl shadow-lg">
               <div className={`flex items-center gap-3 mb-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Award className="w-5 h-5 text-blue-600" />
+                <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
+                  <Award className="w-5 h-5 text-primary-500" />
                 </div>
                 <p className="text-sm text-gray-600 font-arabic">{t.analytics.averageScore}</p>
               </div>
-              <p className="text-3xl font-bold text-blue-600">{avgScore.toFixed(1)}</p>
+              <p className="text-3xl font-bold text-primary-500">{avgScore.toFixed(1)}</p>
             </div>
 
             <div className="bg-white p-6 rounded-xl shadow-lg">
@@ -272,11 +272,11 @@ function CamelAnalyticsContent() {
                   </div>
                 </div>
 
-                <div className={`p-4 bg-blue-50 rounded-lg ${isRTL ? 'text-right' : 'text-left'}`}>
-                  <h3 className="font-semibold text-blue-900 mb-2 font-arabic">
+                <div className={`p-4 bg-primary-50 rounded-lg ${isRTL ? 'text-right' : 'text-left'}`}>
+                  <h3 className="font-semibold text-primary-900 mb-2 font-arabic">
                     {t.breeding.recommendations}
                   </h3>
-                  <p className="text-sm text-blue-800 font-arabic">
+                  <p className="text-sm text-primary-800 font-arabic">
                     {isRTL
                       ? `ركز على تحسين ${weaknesses.map((w) => t.evaluations[w as keyof typeof t.evaluations]).join(' و')} من خلال التغذية المناسبة والرعاية المستهدفة`
                       : `Focus on improving ${weaknesses.map((w) => t.evaluations[w as keyof typeof t.evaluations]).join(' and ')} through proper nutrition and targeted care`}
@@ -314,7 +314,7 @@ function CamelAnalyticsContent() {
                       <div className="space-y-2">
                         <div>
                           <p className="text-xs text-gray-600">AI</p>
-                          <p className="text-lg font-bold text-blue-600">{aiAvg.toFixed(1)}</p>
+                          <p className="text-lg font-bold text-primary-500">{aiAvg.toFixed(1)}</p>
                         </div>
                         <div>
                           <p className="text-xs text-gray-600 font-arabic">{t.roles.expert}</p>

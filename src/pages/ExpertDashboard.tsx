@@ -55,7 +55,7 @@ function ExpertDashboardContent() {
       case 'completed':
         return <Check className="w-5 h-5 text-green-600" />;
       case 'in_progress':
-        return <Clock className="w-5 h-5 text-blue-600" />;
+        return <Clock className="w-5 h-5 text-primary-500" />;
       default:
         return <ClipboardList className="w-5 h-5 text-gray-600" />;
     }
@@ -66,7 +66,7 @@ function ExpertDashboardContent() {
       case 'completed':
         return 'bg-green-50 text-green-700 border-green-200';
       case 'in_progress':
-        return 'bg-blue-50 text-blue-700 border-blue-200';
+        return 'bg-primary-50 text-primary-700 border-primary-200';
       default:
         return 'bg-gray-50 text-gray-700 border-gray-200';
     }
@@ -77,7 +77,7 @@ function ExpertDashboardContent() {
       <Layout>
         <div className="container mx-auto px-4 py-8">
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto"></div>
             <p className="mt-4 text-gray-600 font-arabic">{t.common.loading}</p>
           </div>
         </div>
@@ -114,10 +114,10 @@ function ExpertDashboardContent() {
               <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
                 <div className={isRTL ? 'text-right' : 'text-left'}>
                   <p className="text-gray-600 font-arabic">{t.expert.inProgress}</p>
-                  <p className="text-3xl font-bold text-blue-600">{inProgressAssignments.length}</p>
+                  <p className="text-3xl font-bold text-primary-500">{inProgressAssignments.length}</p>
                 </div>
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Clock className="w-6 h-6 text-blue-600" />
+                <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
+                  <Clock className="w-6 h-6 text-primary-500" />
                 </div>
               </div>
             </div>
@@ -175,7 +175,7 @@ function ExpertDashboardContent() {
                   {assignment.status !== 'completed' && (
                     <Link
                       to={`/expert/evaluate/${assignment.id}`}
-                      className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition font-arabic"
+                      className="inline-block bg-primary-500 text-white px-6 py-2 rounded-lg hover:bg-primary-600 transition font-arabic"
                     >
                       {assignment.status === 'in_progress' ? t.expert.provideScore : t.expert.startEvaluation}
                     </Link>

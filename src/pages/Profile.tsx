@@ -82,7 +82,7 @@ export function Profile() {
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-8">
+            <div className="bg-gradient-to-r from-primary-500 to-primary-600 p-8">
               <div className={`flex items-center gap-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
                 <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center">
                   {profile.profile_picture_url ? (
@@ -92,17 +92,17 @@ export function Profile() {
                       className="w-24 h-24 rounded-full object-cover"
                     />
                   ) : (
-                    <User className="w-12 h-12 text-blue-600" />
+                    <User className="w-12 h-12 text-primary-500" />
                   )}
                 </div>
                 <div className={isRTL ? 'text-right' : 'text-left'}>
                   <h1 className="text-3xl font-bold text-white font-arabic">
                     {profile.first_name} {profile.last_name}
                   </h1>
-                  <p className="text-blue-100 mt-1 font-arabic">
+                  <p className="text-cream-100 mt-1 font-arabic">
                     {t.roles[profile.role]}
                   </p>
-                  <p className="text-blue-200 text-sm mt-2 font-arabic">
+                  <p className="text-cream-200 text-sm mt-2 font-arabic">
                     {t.profile.memberSince}: {memberSince}
                   </p>
                 </div>
@@ -129,7 +129,7 @@ export function Profile() {
                 {!isEditing && (
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-arabic"
+                    className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition font-arabic"
                   >
                     {t.profile.editProfile}
                   </button>
@@ -148,7 +148,7 @@ export function Profile() {
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                         required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-arabic"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-arabic"
                       />
                     </div>
 
@@ -161,7 +161,7 @@ export function Profile() {
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                         required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-arabic"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-arabic"
                       />
                     </div>
                   </div>
@@ -175,7 +175,7 @@ export function Profile() {
                         type="tel"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                         dir="ltr"
                       />
                     </div>
@@ -188,7 +188,7 @@ export function Profile() {
                         type="text"
                         value={country}
                         onChange={(e) => setCountry(e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-arabic"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-arabic"
                       />
                     </div>
                   </div>
@@ -201,7 +201,7 @@ export function Profile() {
                       <select
                         value={gender}
                         onChange={(e) => setGender(e.target.value as 'male' | 'female' | 'other' | '')}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-arabic"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-arabic"
                       >
                         <option value=""></option>
                         <option value="male">{t.auth.male}</option>
@@ -218,7 +218,7 @@ export function Profile() {
                         type="date"
                         value={birthdate}
                         onChange={(e) => setBirthdate(e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                         dir="ltr"
                       />
                     </div>
@@ -228,7 +228,7 @@ export function Profile() {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed font-arabic"
+                      className="flex items-center gap-2 px-6 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition disabled:opacity-50 disabled:cursor-not-allowed font-arabic"
                     >
                       <Save className="w-5 h-5" />
                       {loading ? t.common.loading : t.profile.updateProfile}
@@ -247,7 +247,7 @@ export function Profile() {
               ) : (
                 <div className="space-y-6">
                   <div className={`flex items-center gap-4 p-4 bg-gray-50 rounded-lg ${isRTL ? 'flex-row-reverse' : ''}`}>
-                    <Mail className="w-6 h-6 text-blue-600" />
+                    <Mail className="w-6 h-6 text-primary-500" />
                     <div className={isRTL ? 'text-right' : 'text-left'}>
                       <p className="text-sm text-gray-600 font-arabic">{t.auth.email}</p>
                       <p className="text-lg font-medium" dir="ltr">{profile.email}</p>
@@ -256,7 +256,7 @@ export function Profile() {
 
                   {profile.phone && (
                     <div className={`flex items-center gap-4 p-4 bg-gray-50 rounded-lg ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      <Phone className="w-6 h-6 text-blue-600" />
+                      <Phone className="w-6 h-6 text-primary-500" />
                       <div className={isRTL ? 'text-right' : 'text-left'}>
                         <p className="text-sm text-gray-600 font-arabic">{t.auth.phone}</p>
                         <p className="text-lg font-medium" dir="ltr">{profile.phone}</p>
@@ -266,7 +266,7 @@ export function Profile() {
 
                   {profile.country && (
                     <div className={`flex items-center gap-4 p-4 bg-gray-50 rounded-lg ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      <Globe className="w-6 h-6 text-blue-600" />
+                      <Globe className="w-6 h-6 text-primary-500" />
                       <div className={isRTL ? 'text-right' : 'text-left'}>
                         <p className="text-sm text-gray-600 font-arabic">{t.auth.country}</p>
                         <p className="text-lg font-medium font-arabic">{profile.country}</p>
@@ -276,7 +276,7 @@ export function Profile() {
 
                   {profile.gender && (
                     <div className={`flex items-center gap-4 p-4 bg-gray-50 rounded-lg ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      <User className="w-6 h-6 text-blue-600" />
+                      <User className="w-6 h-6 text-primary-500" />
                       <div className={isRTL ? 'text-right' : 'text-left'}>
                         <p className="text-sm text-gray-600 font-arabic">{t.auth.gender}</p>
                         <p className="text-lg font-medium font-arabic">
@@ -288,7 +288,7 @@ export function Profile() {
 
                   {profile.birthdate && (
                     <div className={`flex items-center gap-4 p-4 bg-gray-50 rounded-lg ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      <Calendar className="w-6 h-6 text-blue-600" />
+                      <Calendar className="w-6 h-6 text-primary-500" />
                       <div className={isRTL ? 'text-right' : 'text-left'}>
                         <p className="text-sm text-gray-600 font-arabic">{t.auth.birthdate}</p>
                         <p className="text-lg font-medium" dir="ltr">

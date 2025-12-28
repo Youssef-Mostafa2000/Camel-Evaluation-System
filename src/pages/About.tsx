@@ -8,7 +8,7 @@ export function About() {
   return (
     <Layout>
       <div className="bg-gray-50">
-        <section className="bg-blue-600 text-white py-16">
+        <section className="bg-primary-500 text-white py-16">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-5xl font-bold mb-4 font-arabic">
               {t.about.title}
@@ -20,8 +20,8 @@ export function About() {
           <div className="max-w-4xl mx-auto space-y-12">
             <div className={`bg-white p-8 rounded-xl shadow-lg ${isRTL ? 'text-right' : 'text-left'}`}>
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Target className="w-6 h-6 text-blue-600" />
+                <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
+                  <Target className="w-6 h-6 text-primary-500" />
                 </div>
                 <h2 className="text-3xl font-bold font-arabic">{t.about.vision}</h2>
               </div>

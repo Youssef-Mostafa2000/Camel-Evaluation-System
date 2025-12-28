@@ -135,7 +135,7 @@ function AdminDashboardContent() {
       <Layout>
         <div className="container mx-auto px-4 py-8">
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto"></div>
             <p className="mt-4 text-gray-600 font-arabic">{t.common.loading}</p>
           </div>
         </div>
@@ -154,10 +154,10 @@ function AdminDashboardContent() {
           <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-6 mb-8">
             <div className="bg-white p-6 rounded-xl shadow-lg">
               <div className={`flex items-center gap-3 mb-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                <Users className="w-6 h-6 text-blue-600" />
+                <Users className="w-6 h-6 text-primary-500" />
                 <p className="text-sm text-gray-600 font-arabic">{t.admin.totalUsers}</p>
               </div>
-              <p className="text-3xl font-bold text-blue-600">{stats.totalUsers}</p>
+              <p className="text-3xl font-bold text-primary-500">{stats.totalUsers}</p>
             </div>
 
             <div className="bg-white p-6 rounded-xl shadow-lg">
@@ -215,7 +215,7 @@ function AdminDashboardContent() {
                     value={selectedCamel}
                     onChange={(e) => setSelectedCamel(e.target.value)}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-arabic"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-arabic"
                   >
                     <option value="">{t.common.filter}...</option>
                     {camels.map((camel) => (
@@ -234,7 +234,7 @@ function AdminDashboardContent() {
                     value={selectedExpert}
                     onChange={(e) => setSelectedExpert(e.target.value)}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-arabic"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-arabic"
                   >
                     <option value="">{t.common.filter}...</option>
                     {experts.map((expert) => (
@@ -253,14 +253,14 @@ function AdminDashboardContent() {
                     value={assignmentNotes}
                     onChange={(e) => setAssignmentNotes(e.target.value)}
                     rows={3}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-arabic"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-arabic"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={assigning}
-                  className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed font-arabic"
+                  className="w-full bg-primary-500 text-white py-3 rounded-lg hover:bg-primary-600 transition disabled:opacity-50 disabled:cursor-not-allowed font-arabic"
                 >
                   {assigning ? t.common.loading : t.expert.assignExpert}
                 </button>

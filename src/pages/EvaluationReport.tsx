@@ -89,7 +89,7 @@ function EvaluationReportContent() {
       <Layout>
         <div className="container mx-auto px-4 py-8">
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto"></div>
             <p className="mt-4 text-gray-600 font-arabic">{t.common.loading}</p>
           </div>
         </div>
@@ -113,7 +113,7 @@ function EvaluationReportContent() {
         <div className="container mx-auto px-4 py-8">
           <Link
             to={`/camels/${evaluation.camel_id}`}
-            className={`flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-6 font-arabic ${isRTL ? 'flex-row-reverse' : ''}`}
+            className={`flex items-center gap-2 text-primary-500 hover:text-primary-600 mb-6 font-arabic ${isRTL ? 'flex-row-reverse' : ''}`}
           >
             <ArrowLeft className={`w-5 h-5 ${isRTL ? 'rotate-180' : ''}`} />
             {t.common.back}
@@ -133,7 +133,7 @@ function EvaluationReportContent() {
                   <h2 className="text-2xl font-bold font-arabic">{t.evaluations.title}</h2>
                   <button
                     onClick={handleDownloadPDF}
-                    className={`flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition font-arabic ${isRTL ? 'flex-row-reverse' : ''}`}
+                    className={`flex items-center gap-2 bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition font-arabic ${isRTL ? 'flex-row-reverse' : ''}`}
                   >
                     <Download className="w-5 h-5" />
                     {t.evaluations.downloadReport}
@@ -169,7 +169,7 @@ function EvaluationReportContent() {
                     onClick={() => setShowSegmentation(!showSegmentation)}
                     className={`flex items-center gap-2 px-4 py-2 rounded-lg transition font-arabic ${
                       showSegmentation
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-primary-500 text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     } ${isRTL ? 'flex-row-reverse' : ''}`}
                   >
@@ -210,7 +210,7 @@ function EvaluationReportContent() {
                           <div className="flex items-center gap-4">
                             <div className={`text-center ${isRTL ? 'text-right' : 'text-left'}`}>
                               <p className="text-sm text-gray-600 font-arabic">{t.evaluations.score}</p>
-                              <p className="text-2xl font-bold text-blue-600">{score}</p>
+                              <p className="text-2xl font-bold text-primary-500">{score}</p>
                             </div>
                             <div className={`text-center ${isRTL ? 'text-right' : 'text-left'}`}>
                               <p className="text-sm text-gray-600 font-arabic">{t.evaluations.weight}</p>
@@ -224,7 +224,7 @@ function EvaluationReportContent() {
                             <div className="mb-3">
                               <div className="w-full bg-gray-200 rounded-full h-2">
                                 <div
-                                  className="bg-blue-600 h-2 rounded-full transition-all duration-500"
+                                  className="bg-primary-500 h-2 rounded-full transition-all duration-500"
                                   style={{ width: `${score}%` }}
                                 ></div>
                               </div>
@@ -249,7 +249,7 @@ function EvaluationReportContent() {
                                   {regionDetails.features.map((feature, idx) => (
                                     <span
                                       key={idx}
-                                      className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-arabic"
+                                      className="px-3 py-1 bg-primary-50 text-primary-700 rounded-full text-sm font-arabic"
                                     >
                                       {feature}
                                     </span>
@@ -295,7 +295,7 @@ function EvaluationReportContent() {
                 </h2>
 
                 <div className="text-center mb-6">
-                  <div className="inline-flex items-center justify-center w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white mb-4">
+                  <div className="inline-flex items-center justify-center w-32 h-32 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 text-white mb-4">
                     <span className="text-5xl font-bold">{evaluation.overall_score}</span>
                   </div>
                   <p className="text-gray-600 font-arabic">{t.evaluations.overallScore}</p>

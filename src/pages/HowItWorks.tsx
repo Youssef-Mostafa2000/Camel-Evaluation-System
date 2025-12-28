@@ -7,7 +7,7 @@ export function HowItWorks() {
 
   const steps = [
     {
-      icon: <Upload className="w-12 h-12 text-blue-600" />,
+      icon: <Upload className="w-12 h-12 text-primary-500" />,
       title: t.howItWorks.step1.title,
       description: t.howItWorks.step1.description,
       color: 'blue',
@@ -29,7 +29,7 @@ export function HowItWorks() {
   return (
     <Layout>
       <div className="bg-gray-50">
-        <section className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-16">
+        <section className="bg-gradient-to-r from-primary-500 to-primary-600 text-white py-16">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-5xl font-bold mb-4 font-arabic">
               {t.howItWorks.title}
@@ -79,7 +79,7 @@ export function HowItWorks() {
           </div>
         </section>
 
-        <section className="bg-blue-600 text-white py-16">
+        <section className="bg-primary-500 text-white py-16">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold mb-6 font-arabic">
               {isRTL ? 'جرب النظام الآن' : 'Try the System Now'}

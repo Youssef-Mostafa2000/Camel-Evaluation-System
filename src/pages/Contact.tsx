@@ -24,7 +24,7 @@ export function Contact() {
   return (
     <Layout>
       <div className="bg-gray-50">
-        <section className="bg-blue-600 text-white py-16">
+        <section className="bg-primary-500 text-white py-16">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-5xl font-bold mb-4 font-arabic">
               {t.contact.title}
@@ -45,8 +45,8 @@ export function Contact() {
               </p>
 
               <div className={`flex items-start gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Mail className="w-6 h-6 text-blue-600" />
+                <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Mail className="w-6 h-6 text-primary-500" />
                 </div>
                 <div className={isRTL ? 'text-right' : 'text-left'}>
                   <h3 className="font-bold mb-1 font-arabic">
@@ -120,7 +120,7 @@ export function Contact() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       required
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-arabic"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-arabic"
                     />
                   </div>
 
@@ -137,7 +137,7 @@ export function Contact() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       dir="ltr"
                     />
                   </div>
@@ -155,13 +155,13 @@ export function Contact() {
                       onChange={(e) => setMessage(e.target.value)}
                       required
                       rows={5}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-arabic"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-arabic"
                     />
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition font-arabic"
+                    className="w-full bg-primary-500 text-white py-3 rounded-lg hover:bg-primary-600 transition font-arabic"
                   >
                     {t.contact.send}
                   </button>
