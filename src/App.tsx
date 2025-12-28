@@ -12,6 +12,10 @@ import { CamelsList } from './pages/CamelsList';
 import { CamelForm } from './pages/CamelForm';
 import { CamelDetails } from './pages/CamelDetails';
 import { EvaluationReport } from './pages/EvaluationReport';
+import { ExpertDashboard } from './pages/ExpertDashboard';
+import { ExpertEvaluate } from './pages/ExpertEvaluate';
+import { CamelAnalytics } from './pages/CamelAnalytics';
+import { AdminDashboard } from './pages/AdminDashboard';
 
 function App() {
   return (
@@ -30,7 +34,11 @@ function App() {
             <Route path="/camels/new" element={<CamelForm />} />
             <Route path="/camels/:id" element={<CamelDetails />} />
             <Route path="/camels/:id/edit" element={<CamelForm />} />
+            <Route path="/camels/:id/analytics" element={<CamelAnalytics />} />
             <Route path="/evaluations/:evaluationId" element={<EvaluationReport />} />
+            <Route path="/expert/dashboard" element={<ExpertDashboard />} />
+            <Route path="/expert/evaluate/:assignmentId" element={<ExpertEvaluate />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </AuthProvider>

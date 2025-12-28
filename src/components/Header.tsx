@@ -43,10 +43,24 @@ export function Header() {
               {t.nav.contact}
             </Link>
 
-            {user && (
-              <Link to="/dashboard" className="text-gray-700 hover:text-blue-600 transition font-arabic">
-                {t.nav.dashboard}
-              </Link>
+            {user && profile && (
+              <>
+                {profile.role === 'admin' && (
+                  <Link to="/admin/dashboard" className="text-gray-700 hover:text-blue-600 transition font-arabic">
+                    {t.nav.dashboard}
+                  </Link>
+                )}
+                {profile.role === 'expert' && (
+                  <Link to="/expert/dashboard" className="text-gray-700 hover:text-blue-600 transition font-arabic">
+                    {t.nav.dashboard}
+                  </Link>
+                )}
+                {(profile.role === 'owner' || profile.role === 'visitor') && (
+                  <Link to="/dashboard" className="text-gray-700 hover:text-blue-600 transition font-arabic">
+                    {t.nav.dashboard}
+                  </Link>
+                )}
+              </>
             )}
 
             <button

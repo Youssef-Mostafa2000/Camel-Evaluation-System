@@ -172,7 +172,7 @@ function CamelDetailsContent() {
                   )}
                 </div>
 
-                <div className="mt-6 pt-6 border-t">
+                <div className="mt-6 pt-6 border-t space-y-3">
                   <label className="block">
                     <input
                       type="file"
@@ -186,6 +186,15 @@ function CamelDetailsContent() {
                       {uploading ? t.common.loading : t.camels.uploadImage}
                     </span>
                   </label>
+
+                  {evaluations.length > 1 && (
+                    <Link
+                      to={`/camels/${id}/analytics`}
+                      className={`flex items-center justify-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition font-arabic ${isRTL ? 'flex-row-reverse' : ''}`}
+                    >
+                      {t.analytics.viewAnalytics}
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>
