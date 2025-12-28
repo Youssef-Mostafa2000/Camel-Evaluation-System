@@ -14,6 +14,7 @@ export const translations = {
       profile: 'الملف الشخصي',
     },
     landing: {
+      badge: 'الذكاء الاصطناعي يلتقي بالأصالة',
       title: 'عَنْدَل - أول نظام عالمي لتقييم جمال الإبل بالذكاء الاصطناعي',
       subtitle: 'نظام تقييم موضوعي وشفاف وسريع باستخدام أحدث تقنيات الذكاء الاصطناعي',
       cta1: 'سجّل الآن',
@@ -267,6 +268,7 @@ export const translations = {
       profile: 'Profile',
     },
     landing: {
+      badge: 'AI Meets Authenticity',
       title: 'Andal - World\'s First AI-Based Camel Beauty Evaluation Platform',
       subtitle: 'Fair, transparent, and fast evaluation using cutting-edge AI technology',
       cta1: 'Register Now',

@@ -10,6 +10,14 @@ export function Landing() {
     <Layout>
       <div className="bg-gradient-to-b from-blue-50 to-white">
         <section className="container mx-auto px-4 py-20 text-center">
+          <div className="flex justify-center mb-6">
+            <div className={`inline-flex items-center gap-3 px-6 py-3 rounded-full bg-amber-50 border border-amber-200 ${isRTL ? 'flex-row-reverse' : ''}`}>
+              <Sparkles className="w-5 h-5 text-amber-600" />
+              <span className="text-amber-900 font-semibold font-arabic">
+                {t.landing.badge}
+              </span>
+            </div>
+          </div>
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 font-arabic leading-tight">
             {t.landing.title}
           </h1>
