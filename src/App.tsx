@@ -11,6 +11,7 @@ import { Dashboard } from './pages/Dashboard';
 import { CamelsList } from './pages/CamelsList';
 import { CamelForm } from './pages/CamelForm';
 import { CamelDetails } from './pages/CamelDetails';
+import { EvaluationReport } from './pages/EvaluationReport';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="/camels/new" element={<CamelForm />} />
             <Route path="/camels/:id" element={<CamelDetails />} />
             <Route path="/camels/:id/edit" element={<CamelForm />} />
+            <Route path="/evaluations/:evaluationId" element={<EvaluationReport />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </AuthProvider>

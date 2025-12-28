@@ -73,20 +73,24 @@ function CamelDetailsContent() {
 
       if (imageError) throw imageError;
 
-      const mockEvaluation = {
-        camel_id: id,
-        image_id: imageData.id,
-        overall_score: Math.floor(Math.random() * 20) + 75,
-        head_score: Math.floor(Math.random() * 20) + 75,
-        neck_score: Math.floor(Math.random() * 20) + 75,
-        hump_score: Math.floor(Math.random() * 20) + 75,
-        body_score: Math.floor(Math.random() * 20) + 75,
-        legs_score: Math.floor(Math.random() * 20) + 75,
-        evaluation_type: 'ai',
-        notes: 'Mock AI evaluation - Phase 1',
-      };
+      const { data: { session } } = await supabase.auth.getSession();
+      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/evaluate-camel`;
 
-      await supabase.from('evaluations').insert([mockEvaluation]);
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session?.access_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          imageId: imageData.id,
+          camelId: id,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Evaluation failed');
+      }
 
       await fetchData();
     } catch (error) {
@@ -250,11 +254,12 @@ function CamelDetailsContent() {
                             </div>
                           </div>
 
-                          {evaluation.notes && (
-                            <p className={`text-sm text-gray-600 font-arabic ${isRTL ? 'text-right' : 'text-left'}`}>
-                              {evaluation.notes}
-                            </p>
-                          )}
+                          <Link
+                            to={`/evaluations/${evaluation.id}`}
+                            className={`mt-4 inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition font-arabic`}
+                          >
+                            {t.evaluations.viewFullReport}
+                          </Link>
                         </div>
                       );
                     })}
