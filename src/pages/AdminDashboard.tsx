@@ -239,7 +239,7 @@ function AdminDashboardContent() {
                     <option value="">{t.common.filter}...</option>
                     {experts.map((expert) => (
                       <option key={expert.id} value={expert.id}>
-                        {expert.full_name} ({expert.assignmentCount} {t.expert.assignments})
+                        {expert.first_name} {expert.last_name} ({expert.assignmentCount} {t.expert.assignments})
                       </option>
                     ))}
                   </select>
@@ -285,7 +285,7 @@ function AdminDashboardContent() {
                     return (
                       <div key={expert.id} className="border rounded-lg p-4">
                         <div className={`flex items-center justify-between mb-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                          <h3 className="font-bold font-arabic">{expert.full_name}</h3>
+                          <h3 className="font-bold font-arabic">{expert.first_name} {expert.last_name}</h3>
                           <span className="text-sm text-gray-600">
                             {expert.completedCount}/{expert.assignmentCount}
                           </span>
@@ -313,7 +313,7 @@ function AdminDashboardContent() {
               <table className="w-full">
                 <thead>
                   <tr className={`border-b ${isRTL ? 'text-right' : 'text-left'}`}>
-                    <th className="py-3 px-4 font-arabic">{t.auth.fullName}</th>
+                    <th className="py-3 px-4 font-arabic">{t.contact.name}</th>
                     <th className="py-3 px-4 font-arabic">{t.auth.email}</th>
                     <th className="py-3 px-4 font-arabic">{t.admin.changeRole}</th>
                   </tr>
@@ -321,7 +321,7 @@ function AdminDashboardContent() {
                 <tbody>
                   {users.map((user) => (
                     <tr key={user.id} className="border-b">
-                      <td className="py-3 px-4 font-arabic">{user.full_name}</td>
+                      <td className="py-3 px-4 font-arabic">{user.first_name} {user.last_name}</td>
                       <td className="py-3 px-4">{user.id}</td>
                       <td className="py-3 px-4">
                         <select

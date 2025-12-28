@@ -26,7 +26,7 @@ export function Header() {
       <nav className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="text-2xl font-bold text-blue-600 font-arabic">
-            {language === 'ar' ? 'تقييم الإبل AI' : 'Camel AI'}
+            {t.siteName}
           </Link>
 
           <div className={`flex items-center gap-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
@@ -73,10 +73,23 @@ export function Header() {
 
             {user ? (
               <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                <div className={`flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg ${isRTL ? 'flex-row-reverse' : ''}`}>
-                  <User className="w-4 h-4" />
-                  <span className="text-sm font-arabic">{profile?.full_name}</span>
-                </div>
+                <Link
+                  to="/profile"
+                  className={`flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition ${isRTL ? 'flex-row-reverse' : ''}`}
+                >
+                  {profile?.profile_picture_url ? (
+                    <img
+                      src={profile.profile_picture_url}
+                      alt="Profile"
+                      className="w-6 h-6 rounded-full object-cover"
+                    />
+                  ) : (
+                    <User className="w-4 h-4" />
+                  )}
+                  <span className="text-sm font-arabic">
+                    {profile?.first_name} {profile?.last_name}
+                  </span>
+                </Link>
                 <button
                   onClick={handleSignOut}
                   className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"

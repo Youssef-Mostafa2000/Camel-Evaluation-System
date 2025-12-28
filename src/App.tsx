@@ -8,6 +8,7 @@ import { Contact } from './pages/Contact';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Dashboard } from './pages/Dashboard';
+import { Profile } from './pages/Profile';
 import { CamelsList } from './pages/CamelsList';
 import { CamelForm } from './pages/CamelForm';
 import { CamelDetails } from './pages/CamelDetails';
@@ -30,6 +31,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/camels" element={<CamelsList />} />
             <Route path="/camels/new" element={<CamelForm />} />
             <Route path="/camels/:id" element={<CamelDetails />} />

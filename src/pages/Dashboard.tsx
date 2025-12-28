@@ -76,7 +76,7 @@ export function Dashboard() {
         <div className="container mx-auto px-4 py-8">
           <div className={`mb-8 ${isRTL ? 'text-right' : 'text-left'}`}>
             <h1 className="text-4xl font-bold mb-2 font-arabic">
-              {t.dashboard.welcome}, {profile?.full_name}
+              {t.dashboard.welcome}, {profile?.first_name} {profile?.last_name}
             </h1>
             <p className="text-gray-600 font-arabic">
               {t.roles[profile?.role || 'visitor']}

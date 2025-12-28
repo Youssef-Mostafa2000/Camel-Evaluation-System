@@ -12,9 +12,14 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export type Profile = {
   id: string;
   role: 'visitor' | 'owner' | 'expert' | 'admin';
-  full_name: string;
+  first_name: string;
+  last_name: string;
+  email: string;
   phone?: string;
-  organization?: string;
+  country?: string;
+  gender?: 'male' | 'female' | 'other';
+  birthdate?: string;
+  profile_picture_url?: string;
   created_at: string;
   updated_at: string;
 };

@@ -2,13 +2,23 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 import { User } from '@supabase/supabase-js';
 import { supabase, Profile } from '../lib/supabase';
 
+interface SignUpData {
+  firstName: string;
+  lastName: string;
+  phone?: string;
+  country?: string;
+  gender?: 'male' | 'female' | 'other';
+  birthdate?: string;
+}
+
 interface AuthContextType {
   user: User | null;
   profile: Profile | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, fullName: string, phone?: string, organization?: string) => Promise<void>;
+  signUp: (email: string, password: string, data: SignUpData) => Promise<void>;
   signOut: () => Promise<void>;
+  updateProfile: (updates: Partial<Profile>) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -67,30 +77,45 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (error) throw error;
   };
 
-  const signUp = async (email: string, password: string, fullName: string, phone?: string, organization?: string) => {
-    const { data, error } = await supabase.auth.signUp({
+  const signUp = async (email: string, password: string, data: SignUpData) => {
+    const { data: authData, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: {
-          full_name: fullName,
+          first_name: data.firstName,
+          last_name: data.lastName,
+          phone: data.phone,
+          country: data.country,
+          gender: data.gender,
+          birthdate: data.birthdate,
         },
       },
     });
 
     if (error) throw error;
 
-    if (data.user && phone) {
-      await supabase
-        .from('profiles')
-        .update({ phone, organization })
-        .eq('id', data.user.id);
+    if (authData.user) {
+      await fetchProfile(authData.user.id);
     }
   };
 
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
+  };
+
+  const updateProfile = async (updates: Partial<Profile>) => {
+    if (!user) throw new Error('No user logged in');
+
+    const { error } = await supabase
+      .from('profiles')
+      .update(updates)
+      .eq('id', user.id);
+
+    if (error) throw error;
+
+    await fetchProfile(user.id);
   };
 
   const value: AuthContextType = {
@@ -100,6 +125,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signIn,
     signUp,
     signOut,
+    updateProfile,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
