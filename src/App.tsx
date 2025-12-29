@@ -17,6 +17,7 @@ import { ExpertDashboard } from './pages/ExpertDashboard';
 import { ExpertEvaluate } from './pages/ExpertEvaluate';
 import { CamelAnalytics } from './pages/CamelAnalytics';
 import { AdminDashboard } from './pages/AdminDashboard';
+import SeedData from './pages/SeedData';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/seed" element={<SeedData />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/camels" element={<CamelsList />} />
