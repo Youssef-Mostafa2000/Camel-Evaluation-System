@@ -45,6 +45,9 @@ export function Header() {
 
             {user && profile && (
               <>
+                <Link to="/camels" className="text-gray-700 hover:text-primary-500 transition font-arabic">
+                  {t.nav.camels || 'Camels'}
+                </Link>
                 {profile.role === 'admin' && (
                   <Link to="/admin/dashboard" className="text-gray-700 hover:text-primary-500 transition font-arabic">
                     {t.nav.dashboard}

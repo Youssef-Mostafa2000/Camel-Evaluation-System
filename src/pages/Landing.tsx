@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 import { Layout } from '../components/Layout';
 import { Sparkles, Zap, Eye } from 'lucide-react';
 
 export function Landing() {
   const { t, isRTL } = useLanguage();
+  const { user, profile } = useAuth();
 
   return (
     <Layout>
@@ -25,18 +27,43 @@ export function Landing() {
             {t.landing.subtitle}
           </p>
           <div className={`flex flex-col sm:flex-row gap-4 justify-center items-center ${isRTL ? 'sm:flex-row-reverse' : ''}`}>
-            <Link
-              to="/register"
-              className="bg-primary-500 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-primary-600 transition shadow-lg hover:shadow-xl transform hover:scale-105 font-arabic"
-            >
-              {t.landing.cta1}
-            </Link>
-            <Link
-              to="/contact"
-              className="bg-white text-secondary-800 px-8 py-4 rounded-lg text-lg font-semibold border-2 border-secondary-800 hover:bg-secondary-50 transition font-arabic"
-            >
-              {t.landing.cta2}
-            </Link>
+            {user && profile ? (
+              <>
+                <Link
+                  to={
+                    profile.role === 'admin'
+                      ? '/admin/dashboard'
+                      : profile.role === 'expert'
+                      ? '/expert/dashboard'
+                      : '/dashboard'
+                  }
+                  className="bg-primary-500 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-primary-600 transition shadow-lg hover:shadow-xl transform hover:scale-105 font-arabic"
+                >
+                  {t.nav.dashboard || 'Go to Dashboard'}
+                </Link>
+                <Link
+                  to="/camels"
+                  className="bg-white text-secondary-800 px-8 py-4 rounded-lg text-lg font-semibold border-2 border-secondary-800 hover:bg-secondary-50 transition font-arabic"
+                >
+                  {t.nav.camels || 'View Camels'}
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/register"
+                  className="bg-primary-500 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-primary-600 transition shadow-lg hover:shadow-xl transform hover:scale-105 font-arabic"
+                >
+                  {t.landing.cta1}
+                </Link>
+                <Link
+                  to="/contact"
+                  className="bg-white text-secondary-800 px-8 py-4 rounded-lg text-lg font-semibold border-2 border-secondary-800 hover:bg-secondary-50 transition font-arabic"
+                >
+                  {t.landing.cta2}
+                </Link>
+              </>
+            )}
           </div>
         </section>
 
@@ -83,24 +110,26 @@ export function Landing() {
           </div>
         </section>
 
-        <section className="bg-primary-500 text-white py-20">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-4xl font-bold mb-6 font-arabic">
-              {isRTL ? 'ابدأ رحلتك اليوم' : 'Start Your Journey Today'}
-            </h2>
-            <p className="text-xl mb-8 font-arabic">
-              {isRTL
-                ? 'انضم لآلاف المربين الذين يستخدمون نظامنا'
-                : 'Join thousands of breeders using our system'}
-            </p>
-            <Link
-              to="/register"
-              className="inline-block bg-white text-primary-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-cream-50 transition shadow-lg font-arabic"
-            >
-              {t.landing.cta1}
-            </Link>
-          </div>
-        </section>
+        {!user && (
+          <section className="bg-primary-500 text-white py-20">
+            <div className="container mx-auto px-4 text-center">
+              <h2 className="text-4xl font-bold mb-6 font-arabic">
+                {isRTL ? 'ابدأ رحلتك اليوم' : 'Start Your Journey Today'}
+              </h2>
+              <p className="text-xl mb-8 font-arabic">
+                {isRTL
+                  ? 'انضم لآلاف المربين الذين يستخدمون نظامنا'
+                  : 'Join thousands of breeders using our system'}
+              </p>
+              <Link
+                to="/register"
+                className="inline-block bg-white text-primary-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-cream-50 transition shadow-lg font-arabic"
+              >
+                {t.landing.cta1}
+              </Link>
+            </div>
+          </section>
+        )}
       </div>
     </Layout>
   );
