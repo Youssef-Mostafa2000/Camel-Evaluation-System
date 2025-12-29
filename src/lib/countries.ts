@@ -4,6 +4,14 @@ export interface Country {
   dialCode: string;
 }
 
+export const getCountryFlag = (countryCode: string): string => {
+  return countryCode
+    .toUpperCase()
+    .split('')
+    .map((char) => String.fromCodePoint(127397 + char.charCodeAt(0)))
+    .join('');
+};
+
 export const countries: Country[] = [
   { name: 'Afghanistan', code: 'AF', dialCode: '+93' },
   { name: 'Albania', code: 'AL', dialCode: '+355' },
