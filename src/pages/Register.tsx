@@ -3,7 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Layout } from '../components/Layout';
-import { countries, getCountryFlag } from '../lib/countries';
+import { CountrySelect } from '../components/CountrySelect';
+import { PhoneCodeSelect } from '../components/PhoneCodeSelect';
 
 export function Register() {
   const [email, setEmail] = useState('');
@@ -195,18 +196,11 @@ export function Register() {
                 {t.auth.phone}
               </label>
               <div className="flex gap-2" dir="ltr">
-                <select
+                <PhoneCodeSelect
                   value={phoneCountryCode}
-                  onChange={(e) => setPhoneCountryCode(e.target.value)}
-                  required
-                  className="w-32 px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
-                >
-                  {countries.map((c) => (
-                    <option key={c.code} value={c.dialCode}>
-                      {getCountryFlag(c.code)} {c.dialCode}
-                    </option>
-                  ))}
-                </select>
+                  onChange={setPhoneCountryCode}
+                  className="w-36"
+                />
                 <input
                   type="text"
                   value={phoneNumber}
@@ -227,19 +221,11 @@ export function Register() {
               <label className={`block text-sm font-medium text-gray-700 mb-2 font-arabic ${isRTL ? 'text-right' : 'text-left'}`}>
                 {t.auth.country}
               </label>
-              <select
+              <CountrySelect
                 value={country}
-                onChange={(e) => setCountry(e.target.value)}
-                required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-arabic"
-              >
-                <option value="">{isRTL ? 'اختر الدولة' : 'Select Country'}</option>
-                {countries.map((c) => (
-                  <option key={c.code} value={c.name}>
-                    {getCountryFlag(c.code)} {c.name}
-                  </option>
-                ))}
-              </select>
+                onChange={setCountry}
+                placeholder={isRTL ? 'اختر الدولة' : 'Select Country'}
+              />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
