@@ -8,7 +8,7 @@ echo "CamelBeauty ML Models Download Script"
 echo "============================================================"
 
 # Check if gdown is installed
-if ! command -v gdown &> /dev/null; then
+if ! command -v gdown > /dev/null 2>&1; then
     echo "gdown not found. Installing..."
     pip install gdown
 fi
