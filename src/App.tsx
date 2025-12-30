@@ -20,6 +20,9 @@ import { AdminDashboard } from './pages/AdminDashboard';
 import SeedData from './pages/SeedData';
 import CamelDetection from './pages/CamelDetection';
 import DetectionHistory from './pages/DetectionHistory';
+import BreedingRegistry from './pages/BreedingRegistry';
+import BreedingProfileForm from './pages/BreedingProfileForm';
+import BreedingProfileDetails from './pages/BreedingProfileDetails';
 
 function App() {
   return (
@@ -36,6 +39,10 @@ function App() {
             <Route path="/seed" element={<SeedData />} />
             <Route path="/detection" element={<CamelDetection />} />
             <Route path="/detection/history" element={<DetectionHistory />} />
+            <Route path="/breeding" element={<BreedingRegistry />} />
+            <Route path="/breeding/new" element={<BreedingProfileForm />} />
+            <Route path="/breeding/:id" element={<BreedingProfileDetails />} />
+            <Route path="/breeding/:id/edit" element={<BreedingProfileForm />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/camels" element={<CamelsList />} />

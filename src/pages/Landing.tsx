@@ -39,6 +39,13 @@ export function Landing() {
             {user && profile ? (
               <>
                 <Link
+                  to="/breeding"
+                  className="bg-gradient-to-r from-green-500 to-green-600 text-white px-10 py-5 rounded-xl text-xl font-bold hover:from-green-600 hover:to-green-700 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 flex items-center gap-3 font-arabic"
+                >
+                  <span>🐪</span>
+                  <span>Find Breeding Match</span>
+                </Link>
+                <Link
                   to={
                     profile.role === 'admin'
                       ? '/admin/dashboard'
