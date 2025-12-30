@@ -21,11 +21,7 @@ MODELS = [
         "url": "https://drive.google.com/uc?id=1Rk7fiatvsR1XurXL8BvEsyoMFINn6YGZ",
         "output": "models/face/best.pt",
     },
-    {
-        "name": "Beauty Scorer Model",
-        "url": "https://drive.google.com/uc?id=1WDXhFo-wJYu1RzKNcRNY3ZEyKdvyXvAi",
-        "output": "models/scorer/best_camel_beauty_all_data_model.pth",
-    },
+    
 ]
 
 
