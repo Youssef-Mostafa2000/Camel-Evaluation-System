@@ -39,11 +39,18 @@ export function Landing() {
             {user && profile ? (
               <>
                 <Link
+                  to="/marketplace"
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-10 py-5 rounded-xl text-xl font-bold hover:from-blue-600 hover:to-blue-700 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 flex items-center gap-3 font-arabic"
+                >
+                  <span>🛒</span>
+                  <span>Browse Marketplace</span>
+                </Link>
+                <Link
                   to="/breeding"
-                  className="bg-gradient-to-r from-green-500 to-green-600 text-white px-10 py-5 rounded-xl text-xl font-bold hover:from-green-600 hover:to-green-700 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 flex items-center gap-3 font-arabic"
+                  className="bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:from-green-600 hover:to-green-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-2 font-arabic"
                 >
                   <span>🐪</span>
-                  <span>Find Breeding Match</span>
+                  <span>Breeding</span>
                 </Link>
                 <Link
                   to={

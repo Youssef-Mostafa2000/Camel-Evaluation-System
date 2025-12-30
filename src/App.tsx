@@ -23,6 +23,7 @@ import DetectionHistory from './pages/DetectionHistory';
 import BreedingRegistry from './pages/BreedingRegistry';
 import BreedingProfileForm from './pages/BreedingProfileForm';
 import BreedingProfileDetails from './pages/BreedingProfileDetails';
+import Marketplace from './pages/Marketplace';
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
             <Route path="/breeding/new" element={<BreedingProfileForm />} />
             <Route path="/breeding/:id" element={<BreedingProfileDetails />} />
             <Route path="/breeding/:id/edit" element={<BreedingProfileForm />} />
+            <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/camels" element={<CamelsList />} />

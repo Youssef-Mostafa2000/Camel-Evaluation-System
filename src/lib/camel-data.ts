@@ -146,3 +146,35 @@ export function calculateCompatibilityScore(
 
   return Math.min(100, Math.round(score));
 }
+
+export const listingDurations = [
+  { value: 7, label: '7 Days' },
+  { value: 30, label: '30 Days' },
+  { value: 90, label: '90 Days' },
+];
+
+export function formatPrice(price: number, currency = 'SAR'): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: currency,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(price);
+}
+
+export function formatPriceShort(price: number): string {
+  if (price >= 1000000) {
+    return `${(price / 1000000).toFixed(1)}M`;
+  }
+  if (price >= 1000) {
+    return `${(price / 1000).toFixed(1)}K`;
+  }
+  return price.toString();
+}
+
+export function calculateDaysRemaining(expiresAt: string): number {
+  const now = new Date();
+  const expires = new Date(expiresAt);
+  const diff = expires.getTime() - now.getTime();
+  return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+}
