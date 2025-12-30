@@ -27,6 +27,15 @@ export function Landing() {
             {t.landing.subtitle}
           </p>
           <div className={`flex flex-col sm:flex-row gap-4 justify-center items-center ${isRTL ? 'sm:flex-row-reverse' : ''}`}>
+            <Link
+              to="/detection"
+              className="bg-gradient-to-r from-gold-500 to-gold-600 text-white px-10 py-5 rounded-xl text-xl font-bold hover:from-gold-600 hover:to-gold-700 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 flex items-center gap-3 font-arabic"
+            >
+              <Sparkles className="w-6 h-6" />
+              <span>Try Beauty Detection</span>
+            </Link>
+          </div>
+          <div className={`flex flex-col sm:flex-row gap-4 justify-center items-center mt-4 ${isRTL ? 'sm:flex-row-reverse' : ''}`}>
             {user && profile ? (
               <>
                 <Link

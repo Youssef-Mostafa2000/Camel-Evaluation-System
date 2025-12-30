@@ -18,6 +18,8 @@ import { ExpertEvaluate } from './pages/ExpertEvaluate';
 import { CamelAnalytics } from './pages/CamelAnalytics';
 import { AdminDashboard } from './pages/AdminDashboard';
 import SeedData from './pages/SeedData';
+import CamelDetection from './pages/CamelDetection';
+import DetectionHistory from './pages/DetectionHistory';
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/seed" element={<SeedData />} />
+            <Route path="/detection" element={<CamelDetection />} />
+            <Route path="/detection/history" element={<DetectionHistory />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/camels" element={<CamelsList />} />

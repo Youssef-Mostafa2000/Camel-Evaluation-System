@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
-import { Globe, LogOut, User } from 'lucide-react';
+import { Globe, LogOut, User, Sparkles } from 'lucide-react';
 
 export function Header() {
   const { t, language, setLanguage, isRTL } = useLanguage();
@@ -41,6 +41,13 @@ export function Header() {
             </Link>
             <Link to="/contact" className="text-gray-700 hover:text-primary-500 transition font-arabic">
               {t.nav.contact}
+            </Link>
+            <Link
+              to="/detection"
+              className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-gold-500 to-gold-600 text-white rounded-lg hover:from-gold-600 hover:to-gold-700 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 font-arabic"
+            >
+              <Sparkles className="w-4 h-4" />
+              <span>Beauty Detection</span>
             </Link>
 
             {user && profile && (
