@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { Upload, X, Image as ImageIcon, AlertCircle } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface ImageFile {
   id: string;
@@ -22,6 +23,7 @@ export default function ImageUploadZone({
   acceptedFormats = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
   maxFileSize = 10 * 1024 * 1024,
 }: ImageUploadZoneProps) {
+  const { t } = useLanguage();
   const [isDragging, setIsDragging] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<ImageFile[]>([]);
   const [error, setError] = useState<string>('');
@@ -145,23 +147,23 @@ export default function ImageUploadZone({
           </div>
 
           <div className="space-y-2">
-            <h3 className="text-2xl font-semibold text-brown-700">
-              Upload Camel Images
+            <h3 className="text-2xl font-semibold text-brown-700 font-arabic">
+              {t.detection.title}
             </h3>
-            <p className="text-sand-700">
-              Drag and drop your images here, or click to browse
+            <p className="text-sand-700 font-arabic">
+              {t.detection.uploadZone}
             </p>
           </div>
 
           <label
             htmlFor="file-upload"
-            className="px-8 py-3 bg-gradient-to-r from-gold-500 to-gold-600 text-white rounded-lg font-medium cursor-pointer hover:from-gold-600 hover:to-gold-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            className="px-8 py-3 bg-gradient-to-r from-gold-500 to-gold-600 text-white rounded-lg font-medium cursor-pointer hover:from-gold-600 hover:to-gold-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-arabic"
           >
-            Select Images
+            {t.detection.uploadZone}
           </label>
 
-          <div className="text-sm text-sand-600 space-y-1">
-            <p>Supported formats: JPEG, PNG, WebP</p>
+          <div className="text-sm text-sand-600 space-y-1 font-arabic">
+            <p>{t.detection.uploadHint}</p>
             <p>Maximum file size: {maxFileSize / 1024 / 1024}MB per image</p>
             <p>Maximum {maxFiles} images at once</p>
           </div>

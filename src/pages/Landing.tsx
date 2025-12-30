@@ -11,7 +11,17 @@ export function Landing() {
   return (
     <Layout>
       <div className="bg-gradient-to-b from-cream-100 to-cream-50">
-        <section className="container mx-auto px-4 py-20 text-center">
+        <section
+          className="relative container mx-auto px-4 py-20 text-center"
+          style={{
+            backgroundImage: 'url(/back2.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/85 to-white/80"></div>
+          <div className="relative z-10">
           <div className="flex justify-center mb-6">
             <div className={`inline-flex items-center gap-3 px-6 py-3 rounded-full bg-cream-200 border border-cream-300 ${isRTL ? 'flex-row-reverse' : ''}`}>
               <Sparkles className="w-5 h-5 text-primary-500" />
@@ -87,6 +97,7 @@ export function Landing() {
                 </Link>
               </>
             )}
+          </div>
           </div>
         </section>
 

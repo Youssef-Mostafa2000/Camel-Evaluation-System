@@ -1,5 +1,6 @@
 import { Download, Share2, Sparkles } from 'lucide-react';
 import BeautyScoreCard, { StarRating } from './BeautyScoreCard';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface DetectionResult {
   id?: string;
@@ -27,6 +28,8 @@ export default function DetectionResults({
   onExport,
   onShare,
 }: DetectionResultsProps) {
+  const { t } = useLanguage();
+
   const getCategoryColor = (category: string) => {
     return category === 'beautiful' ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50';
   };
@@ -39,7 +42,7 @@ export default function DetectionResults({
     <div className="space-y-8">
       <div className="bg-gradient-to-r from-sand-50 to-gold-50 rounded-2xl p-8 border border-sand-200 shadow-xl">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-3xl font-bold text-brown-800">Detection Results</h2>
+          <h2 className="text-3xl font-bold text-brown-800 font-arabic">{t.detection.results}</h2>
           <div className="flex gap-2">
             {onShare && (
               <button
@@ -94,19 +97,19 @@ export default function DetectionResults({
           <div className="space-y-6">
             <div className="bg-white rounded-xl p-6 shadow-md">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-semibold text-brown-800">Overall Score</h3>
+                <h3 className="text-xl font-semibold text-brown-800 font-arabic">{t.detection.beautyScore}</h3>
                 <span className="text-5xl font-bold text-gold-600">
                   {result.overall_score.toFixed(1)}
                 </span>
               </div>
               <StarRating score={result.overall_score} />
 
-              <div className={`mt-4 inline-block px-4 py-2 rounded-lg border ${getCategoryBorder(result.category)} ${getCategoryColor(result.category)} font-semibold`}>
-                {result.category === 'beautiful' ? '✨ Beautiful' : '⚠️ Needs Improvement'}
+              <div className={`mt-4 inline-block px-4 py-2 rounded-lg border ${getCategoryBorder(result.category)} ${getCategoryColor(result.category)} font-semibold font-arabic`}>
+                {result.category === 'beautiful' ? `✨ ${t.detection.beautiful}` : `⚠️ ${t.detection.ugly}`}
               </div>
 
-              <div className="mt-4 text-sm text-gray-600">
-                <span className="font-medium">Confidence:</span> {result.confidence.toFixed(1)}%
+              <div className="mt-4 text-sm text-gray-600 font-arabic">
+                <span className="font-medium">{t.detection.confidence}:</span> {result.confidence.toFixed(1)}%
               </div>
             </div>
 
@@ -143,22 +146,22 @@ export default function DetectionResults({
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <BeautyScoreCard
             score={result.head_beauty_score}
-            label="Head Beauty"
+            label={t.detection.headBeauty}
             icon={<span className="text-lg">👤</span>}
           />
           <BeautyScoreCard
             score={result.neck_beauty_score}
-            label="Neck Beauty"
+            label={t.detection.neckBeauty}
             icon={<span className="text-lg">🦒</span>}
           />
           <BeautyScoreCard
             score={result.body_hump_limbs_score}
-            label="Body & Hump"
+            label={t.detection.bodyHumpLimbs}
             icon={<span className="text-lg">🐪</span>}
           />
           <BeautyScoreCard
             score={result.body_size_score}
-            label="Body Size"
+            label={t.detection.bodySize}
             icon={<span className="text-lg">📏</span>}
           />
         </div>
@@ -167,29 +170,29 @@ export default function DetectionResults({
           <div className="bg-white rounded-xl p-6 shadow-md">
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="w-5 h-5 text-gold-600" />
-              <h3 className="text-lg font-semibold text-brown-800">AI-Powered Recommendations</h3>
+              <h3 className="text-lg font-semibold text-brown-800 font-arabic">{t.detection.recommendations}</h3>
             </div>
-            <p className="text-gray-600 mb-4">
-              Get personalized care, breeding, and health recommendations powered by AI
+            <p className="text-gray-600 mb-4 font-arabic">
+              {t.detection.subtitle}
             </p>
             <div className="flex flex-wrap gap-3">
               <button
                 onClick={() => onGenerateRecommendation('care')}
-                className="px-6 py-3 bg-gradient-to-r from-ocean-500 to-ocean-600 text-white rounded-lg hover:from-ocean-600 hover:to-ocean-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                className="px-6 py-3 bg-gradient-to-r from-ocean-500 to-ocean-600 text-white rounded-lg hover:from-ocean-600 hover:to-ocean-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 font-arabic"
               >
-                Generate Care Plan
+                {t.detection.care}
               </button>
               <button
                 onClick={() => onGenerateRecommendation('breeding')}
-                className="px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                className="px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 font-arabic"
               >
-                Breeding Strategy
+                {t.detection.breeding}
               </button>
               <button
                 onClick={() => onGenerateRecommendation('health')}
-                className="px-6 py-3 bg-gradient-to-r from-gold-500 to-gold-600 text-white rounded-lg hover:from-gold-600 hover:to-gold-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                className="px-6 py-3 bg-gradient-to-r from-gold-500 to-gold-600 text-white rounded-lg hover:from-gold-600 hover:to-gold-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 font-arabic"
               >
-                Health Assessment
+                {t.detection.health}
               </button>
             </div>
           </div>

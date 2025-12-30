@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Sparkles, ArrowLeft, Loader2 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { supabase } from '../lib/supabase';
 import ImageUploadZone from '../components/ImageUploadZone';
 import DetectionResults from '../components/DetectionResults';
@@ -23,6 +24,7 @@ interface DetectionResult {
 export default function CamelDetection() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [processing, setProcessing] = useState(false);
   const [currentStep, setCurrentStep] = useState<'upload' | 'processing' | 'results'>('upload');
@@ -94,7 +96,7 @@ export default function CamelDetection() {
 
   const handleStartDetection = async () => {
     if (selectedFiles.length === 0) {
-      setError('Please select at least one image');
+      setError(t.detection.selectImages);
       return;
     }
 
@@ -190,19 +192,19 @@ export default function CamelDetection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-brown-700 hover:text-brown-900 mb-8 transition-colors"
+          className="flex items-center gap-2 text-brown-700 hover:text-brown-900 mb-8 transition-colors font-arabic"
         >
           <ArrowLeft className="w-5 h-5" />
-          Back
+          {t.common.back}
         </button>
 
         <div className="mb-12 text-center">
           <div className="flex items-center justify-center gap-3 mb-4">
             <Sparkles className="w-10 h-10 text-gold-600" />
-            <h1 className="text-4xl font-bold text-brown-800">Camel Beauty Detection</h1>
+            <h1 className="text-4xl font-bold text-brown-800 font-arabic">{t.detection.title}</h1>
           </div>
-          <p className="text-lg text-sand-700 max-w-2xl mx-auto">
-            Upload camel images to get AI-powered beauty assessments and personalized recommendations
+          <p className="text-lg text-sand-700 max-w-2xl mx-auto font-arabic">
+            {t.detection.subtitle}
           </p>
         </div>
 
@@ -221,9 +223,9 @@ export default function CamelDetection() {
                 <button
                   onClick={handleStartDetection}
                   disabled={processing}
-                  className="px-12 py-4 bg-gradient-to-r from-gold-500 to-gold-600 text-white text-lg font-semibold rounded-xl hover:from-gold-600 hover:to-gold-700 transition-all duration-200 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                  className="px-12 py-4 bg-gradient-to-r from-gold-500 to-gold-600 text-white text-lg font-semibold rounded-xl hover:from-gold-600 hover:to-gold-700 transition-all duration-200 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none font-arabic"
                 >
-                  Start Detection
+                  {t.detection.startDetection}
                 </button>
               </div>
             )}
@@ -233,8 +235,8 @@ export default function CamelDetection() {
         {currentStep === 'processing' && (
           <div className="flex flex-col items-center justify-center py-20">
             <Loader2 className="w-16 h-16 text-gold-600 animate-spin mb-6" />
-            <h2 className="text-2xl font-bold text-brown-800 mb-2">Processing Images...</h2>
-            <p className="text-sand-700">This may take a few moments</p>
+            <h2 className="text-2xl font-bold text-brown-800 mb-2 font-arabic">{t.detection.processing}</h2>
+            <p className="text-sand-700 font-arabic">{t.detection.processingHint}</p>
           </div>
         )}
 
@@ -243,23 +245,25 @@ export default function CamelDetection() {
             {detectionResults.length > 1 && (
               <div className="bg-white rounded-xl p-6 shadow-md">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-brown-800">
-                    Result {currentResultIndex + 1} of {detectionResults.length}
+                  <h3 className="text-lg font-semibold text-brown-800 font-arabic">
+                    {t.detection.resultOf
+                      .replace('{current}', String(currentResultIndex + 1))
+                      .replace('{total}', String(detectionResults.length))}
                   </h3>
                   <div className="flex gap-2">
                     <button
                       onClick={() => setCurrentResultIndex(prev => Math.max(0, prev - 1))}
                       disabled={currentResultIndex === 0}
-                      className="px-4 py-2 bg-sand-200 text-brown-700 rounded-lg hover:bg-sand-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      className="px-4 py-2 bg-sand-200 text-brown-700 rounded-lg hover:bg-sand-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-arabic"
                     >
-                      Previous
+                      {t.detection.previous}
                     </button>
                     <button
                       onClick={() => setCurrentResultIndex(prev => Math.min(detectionResults.length - 1, prev + 1))}
                       disabled={currentResultIndex === detectionResults.length - 1}
-                      className="px-4 py-2 bg-sand-200 text-brown-700 rounded-lg hover:bg-sand-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      className="px-4 py-2 bg-sand-200 text-brown-700 rounded-lg hover:bg-sand-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-arabic"
                     >
-                      Next
+                      {t.detection.next}
                     </button>
                   </div>
                 </div>
@@ -319,9 +323,9 @@ export default function CamelDetection() {
                   setRecommendation(null);
                   setCurrentResultIndex(0);
                 }}
-                className="px-8 py-3 bg-white text-brown-700 rounded-xl border-2 border-sand-300 hover:bg-sand-50 transition-colors font-medium"
+                className="px-8 py-3 bg-white text-brown-700 rounded-xl border-2 border-sand-300 hover:bg-sand-50 transition-colors font-medium font-arabic"
               >
-                Analyze More Images
+                {t.detection.analyzeMore}
               </button>
             </div>
           </div>
