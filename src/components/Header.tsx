@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
-import { Globe, LogOut, User, Sparkles } from 'lucide-react';
+import { Globe, LogOut, User, Sparkles, Search } from 'lucide-react';
 
 export function Header() {
   const { t, language, setLanguage, isRTL } = useLanguage();
@@ -78,6 +78,14 @@ export function Header() {
                 )}
               </>
             )}
+
+            <Link
+              to="/search"
+              className="p-2 rounded-lg hover:bg-gray-100 transition"
+              title="Search"
+            >
+              <Search className="w-5 h-5" />
+            </Link>
 
             <button
               onClick={toggleLanguage}

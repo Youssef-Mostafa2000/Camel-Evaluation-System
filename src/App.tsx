@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { LanguageProvider } from './contexts/LanguageContext';
+import { ToastProvider } from './contexts/ToastContext';
 import { Landing } from './pages/Landing';
 import { About } from './pages/About';
 import { HowItWorks } from './pages/HowItWorks';
@@ -24,13 +25,16 @@ import BreedingRegistry from './pages/BreedingRegistry';
 import BreedingProfileForm from './pages/BreedingProfileForm';
 import BreedingProfileDetails from './pages/BreedingProfileDetails';
 import Marketplace from './pages/Marketplace';
+import Account from './pages/Account';
+import Search from './pages/Search';
 
 function App() {
   return (
     <BrowserRouter>
       <LanguageProvider>
-        <AuthProvider>
-          <Routes>
+        <ToastProvider>
+          <AuthProvider>
+            <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/about" element={<About />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
@@ -45,6 +49,8 @@ function App() {
             <Route path="/breeding/:id" element={<BreedingProfileDetails />} />
             <Route path="/breeding/:id/edit" element={<BreedingProfileForm />} />
             <Route path="/marketplace" element={<Marketplace />} />
+            <Route path="/account" element={<Account />} />
+            <Route path="/search" element={<Search />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/camels" element={<CamelsList />} />
@@ -58,7 +64,8 @@ function App() {
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
-        </AuthProvider>
+          </AuthProvider>
+        </ToastProvider>
       </LanguageProvider>
     </BrowserRouter>
   );
