@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  # ML Backend Service
+  ml-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: camel-ml-backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend/models:/app/models:ro
+      - /tmp/camel_uploads:/tmp/camel_uploads
+    environment:
+      - FLASK_ENV=production
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend Service (optional - if you want to containerize frontend too)
+  # frontend:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: camel-frontend
+  #   ports:
+  #     - "5173:5173"
+  #   environment:
+  #     - VITE_ML_API_URL=http://ml-backend:5000
+  #     - VITE_USE_ML_BACKEND=true
+  #     - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+  #     - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
+  #   depends_on:
+  #     - ml-backend
+  #   restart: unless-stopped
+
+volumes:
+  model_cache:
