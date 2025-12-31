@@ -952,9 +952,10 @@ mask_transform = transforms.Compose([
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-body_seg_model_path = '/content/runs/segment/train_Body_mosaic_0.6/weights/best.pt'
-face_seg_model_path = '/content/runs/segment/train_Face_mosaic_0.6/weights/best.pt'
-beauty_scorer_checkpoint_path = '/content/Camel_beuty_scoring_model/best_camel_beauty_all_data_model.pth'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+body_seg_model_path = os.path.join(BASE_DIR, 'models/body/best.pt')
+face_seg_model_path = os.path.join(BASE_DIR, 'models/face/best.pt')
+beauty_scorer_checkpoint_path = os.path.join(BASE_DIR, 'models/scorer/best_camel_beauty_all_data_model.pth')
 
 body_yolo_model = YOLO(body_seg_model_path)
 face_yolo_model = YOLO(face_seg_model_path)

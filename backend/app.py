@@ -25,10 +25,11 @@ app = Flask(__name__)
 CORS(app)
 
 # Model paths configuration
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATHS = {
-    'body_model': '/content/runs/segment/train_Body_mosaic_0.6/weights/best.pt',
-    'face_model': '/content/runs/segment/train_Face_mosaic_0.6/weights/best.pt',
-    'scorer_model': '/content/Camel_beuty_scoring_model/best_camel_beauty_all_data_model.pth'
+    'body_model': os.path.join(BASE_DIR, 'models/body/best.pt'),
+    'face_model': os.path.join(BASE_DIR, 'models/face/best.pt'),
+    'scorer_model': os.path.join(BASE_DIR, 'models/scorer/best_camel_beauty_all_data_model.pth')
 }
 
 # Temporary upload directory

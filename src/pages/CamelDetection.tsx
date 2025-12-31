@@ -63,35 +63,69 @@ export default function CamelDetection() {
     return publicUrl;
   };
 
-  const detectCamelBeauty = async (imageUrl: string) => {
-    const functionUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/detect-camel-beauty`;
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-    };
+  const detectCamelBeauty = async (file: File, imageUrl: string): Promise<DetectionResult> => {
+    const mlApiUrl = import.meta.env.VITE_ML_API_URL || 'http://localhost:5000';
+    const formData = new FormData();
+    formData.append('image', file);
 
-    if (user) {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.access_token) {
-        headers['Authorization'] = `Bearer ${session.access_token}`;
-      }
-    }
-
-    const response = await fetch(functionUrl, {
+    const response = await fetch(`${mlApiUrl}/api/v1/detect/single`, {
       method: 'POST',
-      headers,
-      body: JSON.stringify({
-        imageUrl,
-        saveToDatabase: true,
-        isPublic: false,
-      }),
+      body: formData,
     });
 
     if (!response.ok) {
-      throw new Error('Detection failed');
+      const error = await response.json();
+      throw new Error(error.error || 'Detection failed');
     }
 
     const data = await response.json();
-    return data.saved;
+
+    if (!data.success || !data.results) {
+      throw new Error('Invalid response from ML backend');
+    }
+
+    const scores = data.results.scores_dict;
+    const detectionId = `detection_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+    const result: DetectionResult = {
+      id: detectionId,
+      overall_score: data.results.total_score_0_100,
+      head_beauty_score: scores.head_beauty_score.score_0_100,
+      neck_beauty_score: scores.neck_beauty_score.score_0_100,
+      body_hump_limbs_score: scores.body_limb_hump_beauty_score.score_0_100,
+      body_size_score: scores.body_size_beauty_score.score_0_100,
+      category: scores.category_encoded.predicted_label.toLowerCase() as 'beautiful' | 'ugly',
+      confidence: scores.category_encoded.probs[scores.category_encoded.predicted_class],
+      image_url: imageUrl,
+      bounding_boxes: data.body_bbox ? [{ type: 'body', coords: data.body_bbox }] : [],
+    };
+
+    if (user) {
+      try {
+        const { error: dbError } = await supabase
+          .from('camel_detections')
+          .insert({
+            user_id: user.id,
+            overall_score: result.overall_score,
+            head_beauty_score: result.head_beauty_score,
+            neck_beauty_score: result.neck_beauty_score,
+            body_hump_limbs_score: result.body_hump_limbs_score,
+            body_size_score: result.body_size_score,
+            category: result.category,
+            confidence: result.confidence,
+            image_url: result.image_url,
+            bounding_boxes: result.bounding_boxes,
+          });
+
+        if (dbError) {
+          console.error('Failed to save detection to database:', dbError);
+        }
+      } catch (err) {
+        console.error('Database save error:', err);
+      }
+    }
+
+    return result;
   };
 
   const handleStartDetection = async () => {
@@ -109,7 +143,7 @@ export default function CamelDetection() {
 
       for (const file of selectedFiles) {
         const imageUrl = await uploadImageToStorage(file);
-        const result = await detectCamelBeauty(imageUrl);
+        const result = await detectCamelBeauty(file, imageUrl);
         results.push(result);
       }
 
