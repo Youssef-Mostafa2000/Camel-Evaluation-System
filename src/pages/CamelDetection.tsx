@@ -64,12 +64,15 @@ export default function CamelDetection() {
   };
 
   const detectCamelBeauty = async (file: File, imageUrl: string): Promise<DetectionResult> => {
-    const apiUrl = 'http://51.21.224.155:8080/predict/single';
+    const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/detect-camel-aws?mode=single`;
     const formData = new FormData();
     formData.append('image', file);
 
     const response = await fetch(apiUrl, {
       method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+      },
       body: formData,
     });
 
@@ -146,7 +149,7 @@ export default function CamelDetection() {
         const result = await detectCamelBeauty(file, imageUrl);
         results.push(result);
       } else {
-        const apiUrl = 'http://51.21.224.155:8080/predict/batch';
+        const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/detect-camel-aws?mode=batch`;
         const formData = new FormData();
 
         const uploadedUrls: string[] = [];
@@ -158,6 +161,9 @@ export default function CamelDetection() {
 
         const response = await fetch(apiUrl, {
           method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          },
           body: formData,
         });
 
