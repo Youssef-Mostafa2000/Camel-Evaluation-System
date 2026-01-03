@@ -55,9 +55,9 @@ export default function DetectionResults({
             )}
             {onExport && (
               <button
-                onClick={() => onExport('json')}
+                onClick={() => onExport('pdf')}
                 className="p-2 bg-white rounded-lg hover:bg-sand-100 transition-colors border border-sand-200"
-                title="Export Data"
+                title="Export as PDF"
               >
                 <Download className="w-5 h-5 text-sand-700" />
               </button>

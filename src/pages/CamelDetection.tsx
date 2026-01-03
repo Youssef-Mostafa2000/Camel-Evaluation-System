@@ -7,6 +7,7 @@ import { supabase } from '../lib/supabase';
 import ImageUploadZone from '../components/ImageUploadZone';
 import DetectionResults from '../components/DetectionResults';
 import RecommendationDisplay from '../components/RecommendationDisplay';
+import jsPDF from 'jspdf';
 
 interface DetectionResult {
   id: string;
@@ -285,19 +286,155 @@ export default function CamelDetection() {
     }
   };
 
-  const handleExport = (format: 'pdf' | 'json' | 'png') => {
+  const handleExport = async (format: 'pdf' | 'json' | 'png') => {
     const currentResult = detectionResults[currentResultIndex];
     if (!currentResult) return;
 
-    if (format === 'json') {
-      const dataStr = JSON.stringify(currentResult, null, 2);
-      const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-      const exportFileDefaultName = `camel-detection-${currentResult.id}.json`;
+    if (format === 'pdf') {
+      const pdf = new jsPDF();
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      let yPosition = 20;
 
-      const linkElement = document.createElement('a');
-      linkElement.setAttribute('href', dataUri);
-      linkElement.setAttribute('download', exportFileDefaultName);
-      linkElement.click();
+      pdf.setFontSize(22);
+      pdf.setTextColor(101, 67, 33);
+      pdf.text('Camel Beauty Detection Report', pageWidth / 2, yPosition, { align: 'center' });
+      yPosition += 15;
+
+      pdf.setFontSize(10);
+      pdf.setTextColor(100, 100, 100);
+      pdf.text(`Detection ID: ${currentResult.id}`, pageWidth / 2, yPosition, { align: 'center' });
+      pdf.text(`Generated: ${new Date().toLocaleString()}`, pageWidth / 2, yPosition + 5, { align: 'center' });
+      yPosition += 20;
+
+      try {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        await new Promise((resolve, reject) => {
+          img.onload = resolve;
+          img.onerror = reject;
+          img.src = currentResult.image_url;
+        });
+
+        const imgWidth = 80;
+        const imgHeight = (img.height / img.width) * imgWidth;
+        const imgX = (pageWidth - imgWidth) / 2;
+        pdf.addImage(img, 'JPEG', imgX, yPosition, imgWidth, imgHeight);
+        yPosition += imgHeight + 15;
+      } catch (error) {
+        console.error('Failed to add image to PDF:', error);
+        yPosition += 10;
+      }
+
+      pdf.setFillColor(212, 175, 55);
+      pdf.rect(15, yPosition, pageWidth - 30, 40, 'F');
+
+      pdf.setFontSize(16);
+      pdf.setTextColor(255, 255, 255);
+      pdf.text('Overall Beauty Score', 20, yPosition + 12);
+
+      pdf.setFontSize(32);
+      pdf.text(currentResult.overall_score.toFixed(1), pageWidth - 25, yPosition + 28, { align: 'right' });
+
+      const stars = Math.round((currentResult.overall_score / 100) * 5);
+      pdf.setFontSize(20);
+      pdf.text('★'.repeat(stars) + '☆'.repeat(5 - stars), 20, yPosition + 32);
+      yPosition += 50;
+
+      pdf.setFillColor(
+        currentResult.category === 'beautiful' ? [16, 185, 129] : [239, 68, 68]
+      );
+      pdf.roundedRect(15, yPosition, 80, 12, 3, 3, 'F');
+      pdf.setFontSize(12);
+      pdf.setTextColor(255, 255, 255);
+      pdf.text(
+        currentResult.category === 'beautiful' ? '✨ Beautiful' : '⚠️ Needs Improvement',
+        20,
+        yPosition + 8
+      );
+
+      pdf.setFontSize(10);
+      pdf.setTextColor(100, 100, 100);
+      pdf.text(`Confidence: ${currentResult.confidence.toFixed(1)}%`, 100, yPosition + 8);
+      yPosition += 25;
+
+      pdf.setFontSize(14);
+      pdf.setTextColor(101, 67, 33);
+      pdf.text('Detailed Beauty Scores', 15, yPosition);
+      yPosition += 10;
+
+      const scores = [
+        { label: 'Head Beauty', value: currentResult.head_beauty_score, icon: '👤' },
+        { label: 'Neck Beauty', value: currentResult.neck_beauty_score, icon: '🦒' },
+        { label: 'Body, Hump & Limbs', value: currentResult.body_hump_limbs_score, icon: '🐪' },
+        { label: 'Body Size', value: currentResult.body_size_score, icon: '📏' },
+      ];
+
+      scores.forEach((score, index) => {
+        const boxY = yPosition + (index * 20);
+
+        pdf.setFillColor(250, 245, 235);
+        pdf.roundedRect(15, boxY, pageWidth - 30, 15, 2, 2, 'F');
+
+        pdf.setDrawColor(210, 180, 140);
+        pdf.roundedRect(15, boxY, pageWidth - 30, 15, 2, 2, 'S');
+
+        pdf.setFontSize(11);
+        pdf.setTextColor(101, 67, 33);
+        pdf.text(`${score.icon} ${score.label}`, 20, boxY + 10);
+
+        pdf.setFontSize(14);
+        pdf.setTextColor(212, 175, 55);
+        pdf.text(score.value.toFixed(1), pageWidth - 25, boxY + 10, { align: 'right' });
+      });
+      yPosition += 90;
+
+      const maxScore = Math.max(
+        currentResult.head_beauty_score,
+        currentResult.neck_beauty_score,
+        currentResult.body_hump_limbs_score,
+        currentResult.body_size_score
+      );
+      const minScore = Math.min(
+        currentResult.head_beauty_score,
+        currentResult.neck_beauty_score,
+        currentResult.body_hump_limbs_score,
+        currentResult.body_size_score
+      );
+
+      pdf.setFontSize(12);
+      pdf.setTextColor(101, 67, 33);
+      pdf.text('Quick Statistics', 15, yPosition);
+      yPosition += 8;
+
+      pdf.setFillColor(220, 252, 231);
+      pdf.roundedRect(15, yPosition, (pageWidth - 35) / 2, 20, 2, 2, 'F');
+      pdf.setFontSize(10);
+      pdf.setTextColor(100, 100, 100);
+      pdf.text('Highest Score', 20, yPosition + 8);
+      pdf.setFontSize(16);
+      pdf.setTextColor(34, 197, 94);
+      pdf.text(maxScore.toFixed(1), 20, yPosition + 16);
+
+      pdf.setFillColor(254, 226, 226);
+      pdf.roundedRect((pageWidth / 2) + 2.5, yPosition, (pageWidth - 35) / 2, 20, 2, 2, 'F');
+      pdf.setFontSize(10);
+      pdf.setTextColor(100, 100, 100);
+      pdf.text('Lowest Score', (pageWidth / 2) + 7.5, yPosition + 8);
+      pdf.setFontSize(16);
+      pdf.setTextColor(239, 68, 68);
+      pdf.text(minScore.toFixed(1), (pageWidth / 2) + 7.5, yPosition + 16);
+
+      pdf.setFontSize(8);
+      pdf.setTextColor(150, 150, 150);
+      pdf.text(
+        'This report was generated by the Camel Beauty Detection System',
+        pageWidth / 2,
+        pageHeight - 10,
+        { align: 'center' }
+      );
+
+      pdf.save(`camel-detection-${currentResult.id}.pdf`);
     }
   };
 
