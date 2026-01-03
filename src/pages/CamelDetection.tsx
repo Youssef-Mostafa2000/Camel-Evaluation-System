@@ -223,41 +223,41 @@ export default function CamelDetection() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sand-50 via-cream-50 to-gold-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-brown-700 hover:text-brown-900 mb-8 transition-colors font-arabic"
+          className="flex items-center gap-2 text-brown-700 hover:text-brown-900 mb-6 md:mb-8 transition-colors font-arabic text-sm sm:text-base"
         >
-          <ArrowLeft className="w-5 h-5" />
+          <ArrowLeft className="w-4 sm:w-5 h-4 sm:h-5" />
           {t.common.back}
         </button>
 
-        <div className="mb-12 text-center">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Sparkles className="w-10 h-10 text-gold-600" />
-            <h1 className="text-4xl font-bold text-brown-800 font-arabic">{t.detection.title}</h1>
+        <div className="mb-8 md:mb-12 text-center">
+          <div className="flex items-center justify-center gap-2 md:gap-3 mb-3 md:mb-4">
+            <Sparkles className="w-8 sm:w-10 h-8 sm:h-10 text-gold-600" />
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-brown-800 font-arabic">{t.detection.title}</h1>
           </div>
-          <p className="text-lg text-sand-700 max-w-2xl mx-auto font-arabic">
+          <p className="text-sm sm:text-base md:text-lg text-sand-700 max-w-2xl mx-auto font-arabic px-4">
             {t.detection.subtitle}
           </p>
         </div>
 
         {error && (
-          <div className="mb-8 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-700 text-center">{error}</p>
+          <div className="mb-6 md:mb-8 p-3 md:p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-red-700 text-center text-sm md:text-base">{error}</p>
           </div>
         )}
 
         {currentStep === 'upload' && (
-          <div className="space-y-8">
+          <div className="space-y-6 md:space-y-8">
             <ImageUploadZone onFilesSelected={handleFilesSelected} />
 
             {selectedFiles.length > 0 && (
-              <div className="flex justify-center">
+              <div className="flex justify-center px-4">
                 <button
                   onClick={handleStartDetection}
                   disabled={processing}
-                  className="px-12 py-4 bg-gradient-to-r from-gold-500 to-gold-600 text-white text-lg font-semibold rounded-xl hover:from-gold-600 hover:to-gold-700 transition-all duration-200 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none font-arabic"
+                  className="w-full sm:w-auto px-8 sm:px-12 py-3 sm:py-4 bg-gradient-to-r from-gold-500 to-gold-600 text-white text-base sm:text-lg font-semibold rounded-xl hover:from-gold-600 hover:to-gold-700 transition-all duration-200 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none font-arabic"
                 >
                   {t.detection.startDetection}
                 </button>
@@ -267,10 +267,10 @@ export default function CamelDetection() {
         )}
 
         {currentStep === 'processing' && (
-          <div className="flex flex-col items-center justify-center py-20">
-            <Loader2 className="w-16 h-16 text-gold-600 animate-spin mb-6" />
-            <h2 className="text-2xl font-bold text-brown-800 mb-2 font-arabic">{t.detection.processing}</h2>
-            <p className="text-sand-700 font-arabic">{t.detection.processingHint}</p>
+          <div className="flex flex-col items-center justify-center py-12 md:py-20 px-4">
+            <Loader2 className="w-12 sm:w-16 h-12 sm:h-16 text-gold-600 animate-spin mb-4 md:mb-6" />
+            <h2 className="text-xl sm:text-2xl font-bold text-brown-800 mb-2 font-arabic text-center">{t.detection.processing}</h2>
+            <p className="text-sm sm:text-base text-sand-700 font-arabic text-center">{t.detection.processingHint}</p>
           </div>
         )}
 
@@ -302,7 +302,7 @@ export default function CamelDetection() {
                   </div>
                 </div>
 
-                <div className="mt-4 grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
+                <div className="mt-4 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
                   {detectionResults.map((result, idx) => (
                     <button
                       key={result.id}

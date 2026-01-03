@@ -211,48 +211,49 @@ export default function Marketplace() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sand-50 via-cream-50 to-gold-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex items-center justify-between mb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 md:mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-brown-800 mb-2">Camel Marketplace</h1>
-            <p className="text-lg text-sand-700">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-brown-800 mb-1 md:mb-2">Camel Marketplace</h1>
+            <p className="text-sm sm:text-base md:text-lg text-sand-700">
               Buy premium camels from verified sellers
             </p>
           </div>
           <Link
             to="/marketplace/sell"
-            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-gold-500 to-gold-600 text-white rounded-lg hover:from-gold-600 hover:to-gold-700 transition-all shadow-md"
+            className="flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-gold-500 to-gold-600 text-white rounded-lg hover:from-gold-600 hover:to-gold-700 transition-all shadow-md text-sm sm:text-base whitespace-nowrap"
           >
-            <Plus className="w-5 h-5" />
-            List Your Camel
+            <Plus className="w-4 sm:w-5 h-4 sm:h-5" />
+            <span className="hidden sm:inline">List Your Camel</span>
+            <span className="sm:hidden">List Camel</span>
           </Link>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-xl p-6 shadow-md border border-sand-200">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
+          <div className="bg-white rounded-xl p-4 md:p-6 shadow-md border border-sand-200">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-medium text-gray-600">Total Listings</h3>
-              <TrendingUp className="w-5 h-5 text-gold-500" />
+              <h3 className="text-xs sm:text-sm font-medium text-gray-600">Total Listings</h3>
+              <TrendingUp className="w-4 sm:w-5 h-4 sm:h-5 text-gold-500" />
             </div>
-            <p className="text-3xl font-bold text-brown-800">{stats.totalListings}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-brown-800">{stats.totalListings}</p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-md border border-sand-200">
+          <div className="bg-white rounded-xl p-4 md:p-6 shadow-md border border-sand-200">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-medium text-gray-600">Average Price</h3>
-              <span className="text-2xl">💰</span>
+              <h3 className="text-xs sm:text-sm font-medium text-gray-600">Average Price</h3>
+              <span className="text-xl sm:text-2xl">💰</span>
             </div>
-            <p className="text-3xl font-bold text-brown-800">
+            <p className="text-2xl sm:text-3xl font-bold text-brown-800">
               {formatPrice(stats.averagePrice)}
             </p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-md border border-sand-200">
+          <div className="bg-white rounded-xl p-4 md:p-6 shadow-md border border-sand-200 sm:col-span-2 md:col-span-1">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-medium text-gray-600">Highest Score</h3>
-              <Star className="w-5 h-5 text-gold-500 fill-gold-500" />
+              <h3 className="text-xs sm:text-sm font-medium text-gray-600">Highest Score</h3>
+              <Star className="w-4 sm:w-5 h-4 sm:h-5 text-gold-500 fill-gold-500" />
             </div>
-            <p className="text-3xl font-bold text-brown-800">{stats.highestScore.toFixed(1)}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-brown-800">{stats.highestScore.toFixed(1)}</p>
           </div>
         </div>
 
@@ -311,57 +312,59 @@ export default function Marketplace() {
           </div>
         )}
 
-        <div className="mb-8 space-y-4">
-          <div className="flex gap-4">
+        <div className="mb-6 md:mb-8 space-y-3 md:space-y-4">
+          <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-gray-400 w-4 sm:w-5 h-4 sm:h-5" />
               <input
                 type="text"
-                placeholder="Search by name, title, or location..."
+                placeholder="Search..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+                className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent"
               />
             </div>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent"
-            >
-              <option value="newest">Newest First</option>
-              <option value="price_low">Price: Low to High</option>
-              <option value="price_high">Price: High to Low</option>
-              <option value="score">Highest Score</option>
-              <option value="popular">Most Popular</option>
-            </select>
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="px-6 py-3 bg-white border border-gray-300 rounded-lg hover:bg-sand-50 transition-colors flex items-center gap-2"
-            >
-              <Filter className="w-5 h-5" />
-              Filters
-              {Object.values(filters).some(v => v !== '' && v !== false) && (
-                <span className="px-2 py-0.5 bg-gold-500 text-white text-xs rounded-full">
-                  Active
-                </span>
-              )}
-            </button>
+            <div className="flex gap-2 sm:gap-3">
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="flex-1 sm:flex-none px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+              >
+                <option value="newest">Newest</option>
+                <option value="price_low">Price: Low</option>
+                <option value="price_high">Price: High</option>
+                <option value="score">Top Score</option>
+                <option value="popular">Popular</option>
+              </select>
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="px-4 sm:px-6 py-2 sm:py-3 bg-white border border-gray-300 rounded-lg hover:bg-sand-50 transition-colors flex items-center gap-2 text-sm sm:text-base whitespace-nowrap"
+              >
+                <Filter className="w-4 sm:w-5 h-4 sm:h-5" />
+                <span className="hidden sm:inline">Filters</span>
+                {Object.values(filters).some(v => v !== '' && v !== false) && (
+                  <span className="px-1.5 sm:px-2 py-0.5 bg-gold-500 text-white text-xs rounded-full">
+                    {Object.values(filters).filter(v => v !== '' && v !== false).length}
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
 
           {showFilters && (
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-lg border border-gray-200">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-brown-800">Advanced Filters</h3>
+                <h3 className="text-base sm:text-lg font-semibold text-brown-800">Filters</h3>
                 <button
                   onClick={clearFilters}
-                  className="text-sm text-red-600 hover:text-red-700 flex items-center gap-1"
+                  className="text-xs sm:text-sm text-red-600 hover:text-red-700 flex items-center gap-1"
                 >
-                  <X className="w-4 h-4" />
-                  Clear All
+                  <X className="w-3 sm:w-4 h-3 sm:h-4" />
+                  Clear
                 </button>
               </div>
 
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Sex</label>
                   <select
