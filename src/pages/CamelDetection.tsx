@@ -173,8 +173,15 @@ export default function CamelDetection() {
 
         const data = await response.json();
 
-        if (!data.success || !data.results || !Array.isArray(data.results)) {
-          throw new Error('Invalid response from detection service');
+        console.log('Batch response data:', data);
+
+        if (!data.success) {
+          throw new Error(data.error || 'Detection failed');
+        }
+
+        if (!data.results || !Array.isArray(data.results)) {
+          console.error('Invalid batch response structure:', data);
+          throw new Error('Invalid response from detection service. Please check console for details.');
         }
 
         data.results.forEach((resultData: any, index: number) => {
