@@ -341,9 +341,11 @@ export default function CamelDetection() {
       pdf.text('★'.repeat(stars) + '☆'.repeat(5 - stars), 20, yPosition + 32);
       yPosition += 50;
 
-      pdf.setFillColor(
-        currentResult.category === 'beautiful' ? [16, 185, 129] : [239, 68, 68]
-      );
+      if (currentResult.category === 'beautiful') {
+        pdf.setFillColor(16, 185, 129);
+      } else {
+        pdf.setFillColor(239, 68, 68);
+      }
       pdf.roundedRect(15, yPosition, 80, 12, 3, 3, 'F');
       pdf.setFontSize(12);
       pdf.setTextColor(255, 255, 255);
