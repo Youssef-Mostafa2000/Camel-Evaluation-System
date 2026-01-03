@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { supabase } from '../lib/supabase';
 import { translations } from '../lib/translations';
+import { Layout } from '../components/Layout';
 import ImageUploadZone from '../components/ImageUploadZone';
 import DetectionResults from '../components/DetectionResults';
 import RecommendationDisplay from '../components/RecommendationDisplay';
@@ -545,8 +546,9 @@ export default function CamelDetection() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sand-50 via-cream-50 to-gold-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
+    <Layout>
+      <div className="min-h-screen bg-gradient-to-br from-sand-50 via-cream-50 to-gold-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <button
           onClick={() => navigate(-1)}
           className="flex items-center gap-2 text-brown-700 hover:text-brown-900 mb-6 md:mb-8 transition-colors font-arabic text-sm sm:text-base"
@@ -687,7 +689,8 @@ export default function CamelDetection() {
             </div>
           </div>
         )}
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 }
