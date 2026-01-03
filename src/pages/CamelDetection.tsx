@@ -287,23 +287,128 @@ export default function CamelDetection() {
     }
   };
 
+  const generateArabicPDF = async (result: DetectionResult) => {
+    // Create a temporary container for rendering
+    const container = document.createElement('div');
+    container.style.position = 'absolute';
+    container.style.left = '-9999px';
+    container.style.top = '0';
+    container.style.width = '794px';
+    container.style.padding = '40px';
+    container.style.backgroundColor = '#ffffff';
+    container.style.fontFamily = 'Arial, sans-serif';
+    container.style.direction = 'rtl';
+    document.body.appendChild(container);
+
+    container.innerHTML = `
+      <div style="text-align: center; margin-bottom: 30px;">
+        <h1 style="color: #654321; font-size: 32px; margin-bottom: 20px;">${t.detection.pdf.reportTitle}</h1>
+      </div>
+
+      <div style="text-align: center; margin-bottom: 30px;">
+        <img src="${result.image_url}" style="max-width: 400px; max-height: 300px; border-radius: 8px;" crossorigin="anonymous" />
+      </div>
+
+      <div style="background: linear-gradient(135deg, #D4AF37, #C4A028); padding: 20px; border-radius: 8px; margin-bottom: 30px; text-align: center;">
+        <div style="color: white; font-size: 20px; margin-bottom: 10px;">${t.detection.pdf.overallScore}</div>
+        <div style="color: white; font-size: 48px; font-weight: bold;">${result.overall_score.toFixed(1)}</div>
+        <div style="color: white; font-size: 24px; margin-top: 10px;">${'★'.repeat(Math.round((result.overall_score / 100) * 5))}${'☆'.repeat(5 - Math.round((result.overall_score / 100) * 5))}</div>
+      </div>
+
+      <div style="background: ${result.category === 'beautiful' ? '#10B981' : '#EF4444'}; color: white; padding: 12px 20px; border-radius: 8px; display: inline-block; margin-bottom: 20px;">
+        ${result.category === 'beautiful' ? '✨ ' + t.detection.beautiful : '⚠️ ' + t.detection.pdf.needsImprovement}
+      </div>
+      <span style="margin-right: 20px; color: #666; font-size: 14px;">${t.detection.confidence}: ${result.confidence.toFixed(1)}%</span>
+
+      <h2 style="color: #654321; font-size: 20px; margin: 30px 0 15px;">${t.detection.pdf.detailedScores}</h2>
+
+      <div style="margin-bottom: 15px; background: #FAF5EB; padding: 15px; border-radius: 8px; border: 2px solid #D2B48C;">
+        <span style="font-size: 16px;">👤 ${t.detection.headBeauty}</span>
+        <span style="float: left; font-size: 20px; color: #D4AF37; font-weight: bold;">${result.head_beauty_score.toFixed(1)}</span>
+      </div>
+
+      <div style="margin-bottom: 15px; background: #FAF5EB; padding: 15px; border-radius: 8px; border: 2px solid #D2B48C;">
+        <span style="font-size: 16px;">🦒 ${t.detection.neckBeauty}</span>
+        <span style="float: left; font-size: 20px; color: #D4AF37; font-weight: bold;">${result.neck_beauty_score.toFixed(1)}</span>
+      </div>
+
+      <div style="margin-bottom: 15px; background: #FAF5EB; padding: 15px; border-radius: 8px; border: 2px solid #D2B48C;">
+        <span style="font-size: 16px;">🐪 ${t.detection.bodyHumpLimbs}</span>
+        <span style="float: left; font-size: 20px; color: #D4AF37; font-weight: bold;">${result.body_hump_limbs_score.toFixed(1)}</span>
+      </div>
+
+      <div style="margin-bottom: 15px; background: #FAF5EB; padding: 15px; border-radius: 8px; border: 2px solid #D2B48C;">
+        <span style="font-size: 16px;">📏 ${t.detection.bodySize}</span>
+        <span style="float: left; font-size: 20px; color: #D4AF37; font-weight: bold;">${result.body_size_score.toFixed(1)}</span>
+      </div>
+
+      <h3 style="color: #654321; font-size: 18px; margin: 30px 0 15px;">${t.detection.pdf.quickStats}</h3>
+
+      <div style="display: flex; gap: 20px; margin-bottom: 40px;">
+        <div style="flex: 1; background: #DCFCE7; padding: 15px; border-radius: 8px;">
+          <div style="color: #666; font-size: 14px; margin-bottom: 5px;">${t.detection.pdf.highestScore}</div>
+          <div style="color: #22C55E; font-size: 24px; font-weight: bold;">${Math.max(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score).toFixed(1)}</div>
+        </div>
+        <div style="flex: 1; background: #FEE2E2; padding: 15px; border-radius: 8px;">
+          <div style="color: #666; font-size: 14px; margin-bottom: 5px;">${t.detection.pdf.lowestScore}</div>
+          <div style="color: #EF4444; font-size: 24px; font-weight: bold;">${Math.min(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score).toFixed(1)}</div>
+        </div>
+      </div>
+
+      <div style="text-align: center; color: #999; font-size: 12px; margin-top: 40px;">
+        ${t.detection.pdf.generatedBy}
+      </div>
+    `;
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const canvas = await html2canvas(container, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#ffffff',
+    });
+
+    document.body.removeChild(container);
+
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const imgData = canvas.toDataURL('image/png');
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+
+    const imgWidth = pageWidth;
+    const imgHeight = (canvas.height * pageWidth) / canvas.width;
+
+    if (imgHeight <= pageHeight) {
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+    } else {
+      const scaledHeight = pageHeight;
+      const scaledWidth = (canvas.width * pageHeight) / canvas.height;
+      const xOffset = (pageWidth - scaledWidth) / 2;
+      pdf.addImage(imgData, 'PNG', xOffset, 0, scaledWidth, scaledHeight);
+    }
+
+    pdf.save(`camel-detection-${result.id}.pdf`);
+  };
+
   const handleExport = async (format: 'pdf' | 'json' | 'png') => {
     const currentResult = detectionResults[currentResultIndex];
     if (!currentResult) return;
 
     if (format === 'pdf') {
+      if (language === 'ar') {
+        await generateArabicPDF(currentResult);
+        return;
+      }
+
       const pdf = new jsPDF();
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
       let yPosition = 20;
 
-      // For now, use English for PDF to avoid Arabic encoding issues
-      // TODO: Add proper Arabic font support in the future
-      const pdfT = translations.en.detection;
-
       pdf.setFontSize(22);
       pdf.setTextColor(101, 67, 33);
-      pdf.text(pdfT.pdf.reportTitle, pageWidth / 2, yPosition, { align: 'center' });
+      pdf.text(t.detection.pdf.reportTitle, pageWidth / 2, yPosition, { align: 'center' });
       yPosition += 20;
 
       try {
@@ -330,7 +435,7 @@ export default function CamelDetection() {
 
       pdf.setFontSize(16);
       pdf.setTextColor(255, 255, 255);
-      pdf.text(pdfT.pdf.overallScore, 20, yPosition + 12);
+      pdf.text(t.detection.pdf.overallScore, 20, yPosition + 12);
 
       pdf.setFontSize(32);
       pdf.text(currentResult.overall_score.toFixed(1), pageWidth - 25, yPosition + 28, { align: 'right' });
@@ -349,25 +454,25 @@ export default function CamelDetection() {
       pdf.setFontSize(12);
       pdf.setTextColor(255, 255, 255);
       const categoryText = currentResult.category === 'beautiful'
-        ? `✨ ${pdfT.beautiful}`
-        : `⚠️ ${pdfT.pdf.needsImprovement}`;
+        ? `✨ ${t.detection.beautiful}`
+        : `⚠️ ${t.detection.pdf.needsImprovement}`;
       pdf.text(categoryText, 20, yPosition + 8);
 
       pdf.setFontSize(10);
       pdf.setTextColor(100, 100, 100);
-      pdf.text(`${pdfT.confidence}: ${currentResult.confidence.toFixed(1)}%`, 100, yPosition + 8);
+      pdf.text(`${t.detection.confidence}: ${currentResult.confidence.toFixed(1)}%`, 100, yPosition + 8);
       yPosition += 25;
 
       pdf.setFontSize(14);
       pdf.setTextColor(101, 67, 33);
-      pdf.text(pdfT.pdf.detailedScores, 15, yPosition);
+      pdf.text(t.detection.pdf.detailedScores, 15, yPosition);
       yPosition += 10;
 
       const scores = [
-        { label: pdfT.headBeauty, value: currentResult.head_beauty_score, icon: '👤' },
-        { label: pdfT.neckBeauty, value: currentResult.neck_beauty_score, icon: '🦒' },
-        { label: pdfT.bodyHumpLimbs, value: currentResult.body_hump_limbs_score, icon: '🐪' },
-        { label: pdfT.bodySize, value: currentResult.body_size_score, icon: '📏' },
+        { label: t.detection.headBeauty, value: currentResult.head_beauty_score, icon: '👤' },
+        { label: t.detection.neckBeauty, value: currentResult.neck_beauty_score, icon: '🦒' },
+        { label: t.detection.bodyHumpLimbs, value: currentResult.body_hump_limbs_score, icon: '🐪' },
+        { label: t.detection.bodySize, value: currentResult.body_size_score, icon: '📏' },
       ];
 
       scores.forEach((score, index) => {
@@ -404,14 +509,14 @@ export default function CamelDetection() {
 
       pdf.setFontSize(12);
       pdf.setTextColor(101, 67, 33);
-      pdf.text(pdfT.pdf.quickStats, 15, yPosition);
+      pdf.text(t.detection.pdf.quickStats, 15, yPosition);
       yPosition += 8;
 
       pdf.setFillColor(220, 252, 231);
       pdf.roundedRect(15, yPosition, (pageWidth - 35) / 2, 20, 2, 2, 'F');
       pdf.setFontSize(10);
       pdf.setTextColor(100, 100, 100);
-      pdf.text(pdfT.pdf.highestScore, 20, yPosition + 8);
+      pdf.text(t.detection.pdf.highestScore, 20, yPosition + 8);
       pdf.setFontSize(16);
       pdf.setTextColor(34, 197, 94);
       pdf.text(maxScore.toFixed(1), 20, yPosition + 16);
@@ -420,7 +525,7 @@ export default function CamelDetection() {
       pdf.roundedRect((pageWidth / 2) + 2.5, yPosition, (pageWidth - 35) / 2, 20, 2, 2, 'F');
       pdf.setFontSize(10);
       pdf.setTextColor(100, 100, 100);
-      pdf.text(pdfT.pdf.lowestScore, (pageWidth / 2) + 7.5, yPosition + 8);
+      pdf.text(t.detection.pdf.lowestScore, (pageWidth / 2) + 7.5, yPosition + 8);
       pdf.setFontSize(16);
       pdf.setTextColor(239, 68, 68);
       pdf.text(minScore.toFixed(1), (pageWidth / 2) + 7.5, yPosition + 16);
@@ -428,7 +533,7 @@ export default function CamelDetection() {
       pdf.setFontSize(8);
       pdf.setTextColor(150, 150, 150);
       pdf.text(
-        pdfT.pdf.generatedBy,
+        t.detection.pdf.generatedBy,
         pageWidth / 2,
         pageHeight - 10,
         { align: 'center' }
