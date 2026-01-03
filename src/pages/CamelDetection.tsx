@@ -64,24 +64,23 @@ export default function CamelDetection() {
   };
 
   const detectCamelBeauty = async (file: File, imageUrl: string): Promise<DetectionResult> => {
-    const mlApiUrl = import.meta.env.VITE_ML_API_URL || 'http://localhost:5000';
+    const apiUrl = 'http://51.21.224.155:8080/predict/single';
     const formData = new FormData();
     formData.append('image', file);
 
-    const response = await fetch(`${mlApiUrl}/api/v1/detect/single`, {
+    const response = await fetch(apiUrl, {
       method: 'POST',
       body: formData,
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Detection failed');
+      throw new Error('Detection failed. Please try again.');
     }
 
     const data = await response.json();
 
     if (!data.success || !data.results) {
-      throw new Error('Invalid response from ML backend');
+      throw new Error('Invalid response from detection service');
     }
 
     const scores = data.results.scores_dict;
@@ -95,7 +94,7 @@ export default function CamelDetection() {
       body_hump_limbs_score: scores.body_limb_hump_beauty_score.score_0_100,
       body_size_score: scores.body_size_beauty_score.score_0_100,
       category: scores.category_encoded.predicted_label.toLowerCase() as 'beautiful' | 'ugly',
-      confidence: scores.category_encoded.probs[scores.category_encoded.predicted_class],
+      confidence: scores.category_encoded.probs[scores.category_encoded.predicted_class] * 100,
       image_url: imageUrl,
       bounding_boxes: data.body_bbox ? [{ type: 'body', coords: data.body_bbox }] : [],
     };
@@ -141,10 +140,78 @@ export default function CamelDetection() {
     try {
       const results: DetectionResult[] = [];
 
-      for (const file of selectedFiles) {
+      if (selectedFiles.length === 1) {
+        const file = selectedFiles[0];
         const imageUrl = await uploadImageToStorage(file);
         const result = await detectCamelBeauty(file, imageUrl);
         results.push(result);
+      } else {
+        const apiUrl = 'http://51.21.224.155:8080/predict/batch';
+        const formData = new FormData();
+
+        const uploadedUrls: string[] = [];
+        for (const file of selectedFiles) {
+          const imageUrl = await uploadImageToStorage(file);
+          uploadedUrls.push(imageUrl);
+          formData.append('images', file);
+        }
+
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error('Batch detection failed. Please try again.');
+        }
+
+        const data = await response.json();
+
+        if (!data.success || !data.results || !Array.isArray(data.results)) {
+          throw new Error('Invalid response from detection service');
+        }
+
+        data.results.forEach((resultData: any, index: number) => {
+          const scores = resultData.scores_dict;
+          const detectionId = `detection_${Date.now()}_${index}_${Math.random().toString(36).substr(2, 9)}`;
+
+          const result: DetectionResult = {
+            id: detectionId,
+            overall_score: resultData.total_score_0_100,
+            head_beauty_score: scores.head_beauty_score.score_0_100,
+            neck_beauty_score: scores.neck_beauty_score.score_0_100,
+            body_hump_limbs_score: scores.body_limb_hump_beauty_score.score_0_100,
+            body_size_score: scores.body_size_beauty_score.score_0_100,
+            category: scores.category_encoded.predicted_label.toLowerCase() as 'beautiful' | 'ugly',
+            confidence: scores.category_encoded.probs[scores.category_encoded.predicted_class] * 100,
+            image_url: uploadedUrls[index],
+            bounding_boxes: resultData.body_bbox ? [{ type: 'body', coords: resultData.body_bbox }] : [],
+          };
+
+          results.push(result);
+
+          if (user) {
+            supabase
+              .from('camel_detections')
+              .insert({
+                user_id: user.id,
+                overall_score: result.overall_score,
+                head_beauty_score: result.head_beauty_score,
+                neck_beauty_score: result.neck_beauty_score,
+                body_hump_limbs_score: result.body_hump_limbs_score,
+                body_size_score: result.body_size_score,
+                category: result.category,
+                confidence: result.confidence,
+                image_url: result.image_url,
+                bounding_boxes: result.bounding_boxes,
+              })
+              .then(({ error: dbError }) => {
+                if (dbError) {
+                  console.error('Failed to save detection to database:', dbError);
+                }
+              });
+          }
+        });
       }
 
       setDetectionResults(results);
