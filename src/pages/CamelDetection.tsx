@@ -179,18 +179,18 @@ export default function CamelDetection() {
           throw new Error(data.error || 'Detection failed');
         }
 
-        if (!data.results || !Array.isArray(data.results)) {
+        if (!data.items || !Array.isArray(data.items)) {
           console.error('Invalid batch response structure:', data);
           throw new Error('Invalid response from detection service. Please check console for details.');
         }
 
-        data.results.forEach((resultData: any, index: number) => {
-          const scores = resultData.scores_dict;
+        data.items.forEach((item: any, index: number) => {
+          const scores = item.results.scores_dict;
           const detectionId = `detection_${Date.now()}_${index}_${Math.random().toString(36).substr(2, 9)}`;
 
           const result: DetectionResult = {
             id: detectionId,
-            overall_score: resultData.total_score_0_100,
+            overall_score: item.results.total_score_0_100,
             head_beauty_score: scores.head_beauty_score.score_0_100,
             neck_beauty_score: scores.neck_beauty_score.score_0_100,
             body_hump_limbs_score: scores.body_limb_hump_beauty_score.score_0_100,
@@ -198,7 +198,7 @@ export default function CamelDetection() {
             category: scores.category_encoded.predicted_label.toLowerCase() as 'beautiful' | 'ugly',
             confidence: scores.category_encoded.probs[scores.category_encoded.predicted_class] * 100,
             image_url: uploadedUrls[index],
-            bounding_boxes: resultData.body_bbox ? [{ type: 'body', coords: resultData.body_bbox }] : [],
+            bounding_boxes: item.body_bbox ? [{ type: 'body', coords: item.body_bbox }] : [],
           };
 
           results.push(result);
