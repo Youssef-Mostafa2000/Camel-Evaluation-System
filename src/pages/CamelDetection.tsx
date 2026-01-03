@@ -4,6 +4,7 @@ import { Sparkles, ArrowLeft, Loader2 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { supabase } from '../lib/supabase';
+import { translations } from '../lib/translations';
 import ImageUploadZone from '../components/ImageUploadZone';
 import DetectionResults from '../components/DetectionResults';
 import RecommendationDisplay from '../components/RecommendationDisplay';
@@ -296,15 +297,13 @@ export default function CamelDetection() {
       const pageHeight = pdf.internal.pageSize.getHeight();
       let yPosition = 20;
 
+      // For now, use English for PDF to avoid Arabic encoding issues
+      // TODO: Add proper Arabic font support in the future
+      const pdfT = translations.en.detection;
+
       pdf.setFontSize(22);
       pdf.setTextColor(101, 67, 33);
-      pdf.text('Camel Beauty Detection Report', pageWidth / 2, yPosition, { align: 'center' });
-      yPosition += 15;
-
-      pdf.setFontSize(10);
-      pdf.setTextColor(100, 100, 100);
-      pdf.text(`Detection ID: ${currentResult.id}`, pageWidth / 2, yPosition, { align: 'center' });
-      pdf.text(`Generated: ${new Date().toLocaleString()}`, pageWidth / 2, yPosition + 5, { align: 'center' });
+      pdf.text(pdfT.pdf.reportTitle, pageWidth / 2, yPosition, { align: 'center' });
       yPosition += 20;
 
       try {
@@ -331,7 +330,7 @@ export default function CamelDetection() {
 
       pdf.setFontSize(16);
       pdf.setTextColor(255, 255, 255);
-      pdf.text('Overall Beauty Score', 20, yPosition + 12);
+      pdf.text(pdfT.pdf.overallScore, 20, yPosition + 12);
 
       pdf.setFontSize(32);
       pdf.text(currentResult.overall_score.toFixed(1), pageWidth - 25, yPosition + 28, { align: 'right' });
@@ -349,27 +348,26 @@ export default function CamelDetection() {
       pdf.roundedRect(15, yPosition, 80, 12, 3, 3, 'F');
       pdf.setFontSize(12);
       pdf.setTextColor(255, 255, 255);
-      pdf.text(
-        currentResult.category === 'beautiful' ? '✨ Beautiful' : '⚠️ Needs Improvement',
-        20,
-        yPosition + 8
-      );
+      const categoryText = currentResult.category === 'beautiful'
+        ? `✨ ${pdfT.beautiful}`
+        : `⚠️ ${pdfT.pdf.needsImprovement}`;
+      pdf.text(categoryText, 20, yPosition + 8);
 
       pdf.setFontSize(10);
       pdf.setTextColor(100, 100, 100);
-      pdf.text(`Confidence: ${currentResult.confidence.toFixed(1)}%`, 100, yPosition + 8);
+      pdf.text(`${pdfT.confidence}: ${currentResult.confidence.toFixed(1)}%`, 100, yPosition + 8);
       yPosition += 25;
 
       pdf.setFontSize(14);
       pdf.setTextColor(101, 67, 33);
-      pdf.text('Detailed Beauty Scores', 15, yPosition);
+      pdf.text(pdfT.pdf.detailedScores, 15, yPosition);
       yPosition += 10;
 
       const scores = [
-        { label: 'Head Beauty', value: currentResult.head_beauty_score, icon: '👤' },
-        { label: 'Neck Beauty', value: currentResult.neck_beauty_score, icon: '🦒' },
-        { label: 'Body, Hump & Limbs', value: currentResult.body_hump_limbs_score, icon: '🐪' },
-        { label: 'Body Size', value: currentResult.body_size_score, icon: '📏' },
+        { label: pdfT.headBeauty, value: currentResult.head_beauty_score, icon: '👤' },
+        { label: pdfT.neckBeauty, value: currentResult.neck_beauty_score, icon: '🦒' },
+        { label: pdfT.bodyHumpLimbs, value: currentResult.body_hump_limbs_score, icon: '🐪' },
+        { label: pdfT.bodySize, value: currentResult.body_size_score, icon: '📏' },
       ];
 
       scores.forEach((score, index) => {
@@ -406,14 +404,14 @@ export default function CamelDetection() {
 
       pdf.setFontSize(12);
       pdf.setTextColor(101, 67, 33);
-      pdf.text('Quick Statistics', 15, yPosition);
+      pdf.text(pdfT.pdf.quickStats, 15, yPosition);
       yPosition += 8;
 
       pdf.setFillColor(220, 252, 231);
       pdf.roundedRect(15, yPosition, (pageWidth - 35) / 2, 20, 2, 2, 'F');
       pdf.setFontSize(10);
       pdf.setTextColor(100, 100, 100);
-      pdf.text('Highest Score', 20, yPosition + 8);
+      pdf.text(pdfT.pdf.highestScore, 20, yPosition + 8);
       pdf.setFontSize(16);
       pdf.setTextColor(34, 197, 94);
       pdf.text(maxScore.toFixed(1), 20, yPosition + 16);
@@ -422,7 +420,7 @@ export default function CamelDetection() {
       pdf.roundedRect((pageWidth / 2) + 2.5, yPosition, (pageWidth - 35) / 2, 20, 2, 2, 'F');
       pdf.setFontSize(10);
       pdf.setTextColor(100, 100, 100);
-      pdf.text('Lowest Score', (pageWidth / 2) + 7.5, yPosition + 8);
+      pdf.text(pdfT.pdf.lowestScore, (pageWidth / 2) + 7.5, yPosition + 8);
       pdf.setFontSize(16);
       pdf.setTextColor(239, 68, 68);
       pdf.text(minScore.toFixed(1), (pageWidth / 2) + 7.5, yPosition + 16);
@@ -430,7 +428,7 @@ export default function CamelDetection() {
       pdf.setFontSize(8);
       pdf.setTextColor(150, 150, 150);
       pdf.text(
-        'This report was generated by the Camel Beauty Detection System',
+        pdfT.pdf.generatedBy,
         pageWidth / 2,
         pageHeight - 10,
         { align: 'center' }
