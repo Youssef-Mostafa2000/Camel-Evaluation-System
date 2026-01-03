@@ -9,6 +9,7 @@ import ImageUploadZone from '../components/ImageUploadZone';
 import DetectionResults from '../components/DetectionResults';
 import RecommendationDisplay from '../components/RecommendationDisplay';
 import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 interface DetectionResult {
   id: string;
@@ -26,7 +27,7 @@ interface DetectionResult {
 export default function CamelDetection() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [processing, setProcessing] = useState(false);
   const [currentStep, setCurrentStep] = useState<'upload' | 'processing' | 'results'>('upload');
