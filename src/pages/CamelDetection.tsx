@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Sparkles, ArrowLeft, Loader2 } from 'lucide-react';
+import { Sparkles, Loader2 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { supabase } from '../lib/supabase';
@@ -26,7 +25,6 @@ interface DetectionResult {
 }
 
 export default function CamelDetection() {
-  const navigate = useNavigate();
   const { user } = useAuth();
   const { t, language } = useLanguage();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -289,129 +287,153 @@ export default function CamelDetection() {
     }
   };
 
-  const generateArabicPDF = async (result: DetectionResult) => {
-    // Create a temporary container for rendering
-    const container = document.createElement('div');
-    container.style.position = 'absolute';
-    container.style.left = '-9999px';
-    container.style.top = '0';
-    container.style.width = '794px';
-    container.style.padding = '40px';
-    container.style.backgroundColor = '#ffffff';
-    container.style.fontFamily = 'Arial, sans-serif';
-    container.style.direction = 'rtl';
-    document.body.appendChild(container);
-
-    container.innerHTML = `
-      <div style="text-align: center; margin-bottom: 30px;">
-        <h1 style="color: #654321; font-size: 32px; margin-bottom: 20px;">${t.detection.pdf.reportTitle}</h1>
-      </div>
-
-      <div style="text-align: center; margin-bottom: 30px;">
-        <img src="${result.image_url}" style="max-width: 400px; max-height: 300px; border-radius: 8px;" crossorigin="anonymous" />
-      </div>
-
-      <div style="background: linear-gradient(135deg, #D4AF37, #C4A028); padding: 20px; border-radius: 8px; margin-bottom: 30px; text-align: center;">
-        <div style="color: white; font-size: 20px; margin-bottom: 10px;">${t.detection.pdf.overallScore}</div>
-        <div style="color: white; font-size: 48px; font-weight: bold;">${result.overall_score.toFixed(1)}</div>
-        <div style="color: white; font-size: 24px; margin-top: 10px;">${'★'.repeat(Math.round((result.overall_score / 100) * 5))}${'☆'.repeat(5 - Math.round((result.overall_score / 100) * 5))}</div>
-      </div>
-
-      <div style="background: ${result.category === 'beautiful' ? '#10B981' : '#EF4444'}; color: white; padding: 12px 20px; border-radius: 8px; display: inline-block; margin-bottom: 20px;">
-        ${result.category === 'beautiful' ? '✨ ' + t.detection.beautiful : '⚠️ ' + t.detection.pdf.needsImprovement}
-      </div>
-      <span style="margin-right: 20px; color: #666; font-size: 14px;">${t.detection.confidence}: ${result.confidence.toFixed(1)}%</span>
-
-      <h2 style="color: #654321; font-size: 20px; margin: 30px 0 15px;">${t.detection.pdf.detailedScores}</h2>
-
-      <div style="margin-bottom: 15px; background: #FAF5EB; padding: 15px; border-radius: 8px; border: 2px solid #D2B48C;">
-        <span style="font-size: 16px;">👤 ${t.detection.headBeauty}</span>
-        <span style="float: left; font-size: 20px; color: #D4AF37; font-weight: bold;">${result.head_beauty_score.toFixed(1)}</span>
-      </div>
-
-      <div style="margin-bottom: 15px; background: #FAF5EB; padding: 15px; border-radius: 8px; border: 2px solid #D2B48C;">
-        <span style="font-size: 16px;">🦒 ${t.detection.neckBeauty}</span>
-        <span style="float: left; font-size: 20px; color: #D4AF37; font-weight: bold;">${result.neck_beauty_score.toFixed(1)}</span>
-      </div>
-
-      <div style="margin-bottom: 15px; background: #FAF5EB; padding: 15px; border-radius: 8px; border: 2px solid #D2B48C;">
-        <span style="font-size: 16px;">🐪 ${t.detection.bodyHumpLimbs}</span>
-        <span style="float: left; font-size: 20px; color: #D4AF37; font-weight: bold;">${result.body_hump_limbs_score.toFixed(1)}</span>
-      </div>
-
-      <div style="margin-bottom: 15px; background: #FAF5EB; padding: 15px; border-radius: 8px; border: 2px solid #D2B48C;">
-        <span style="font-size: 16px;">📏 ${t.detection.bodySize}</span>
-        <span style="float: left; font-size: 20px; color: #D4AF37; font-weight: bold;">${result.body_size_score.toFixed(1)}</span>
-      </div>
-
-      <h3 style="color: #654321; font-size: 18px; margin: 30px 0 15px;">${t.detection.pdf.quickStats}</h3>
-
-      <div style="display: flex; gap: 20px; margin-bottom: 40px;">
-        <div style="flex: 1; background: #DCFCE7; padding: 15px; border-radius: 8px;">
-          <div style="color: #666; font-size: 14px; margin-bottom: 5px;">${t.detection.pdf.highestScore}</div>
-          <div style="color: #22C55E; font-size: 24px; font-weight: bold;">${Math.max(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score).toFixed(1)}</div>
-        </div>
-        <div style="flex: 1; background: #FEE2E2; padding: 15px; border-radius: 8px;">
-          <div style="color: #666; font-size: 14px; margin-bottom: 5px;">${t.detection.pdf.lowestScore}</div>
-          <div style="color: #EF4444; font-size: 24px; font-weight: bold;">${Math.min(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score).toFixed(1)}</div>
-        </div>
-      </div>
-
-      <div style="text-align: center; color: #999; font-size: 12px; margin-top: 40px;">
-        ${t.detection.pdf.generatedBy}
-      </div>
-    `;
-
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    const canvas = await html2canvas(container, {
-      scale: 2,
-      useCORS: true,
-      allowTaint: true,
-      backgroundColor: '#ffffff',
-    });
-
-    document.body.removeChild(container);
-
+  const generateArabicPDF = async (sortedResults: DetectionResult[]) => {
     const pdf = new jsPDF('p', 'mm', 'a4');
-    const imgData = canvas.toDataURL('image/png');
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
 
-    const imgWidth = pageWidth;
-    const imgHeight = (canvas.height * pageWidth) / canvas.width;
+    for (let i = 0; i < sortedResults.length; i++) {
+      const result = sortedResults[i];
+      const ranking = i + 1;
 
-    if (imgHeight <= pageHeight) {
-      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-    } else {
-      const scaledHeight = pageHeight;
-      const scaledWidth = (canvas.width * pageHeight) / canvas.height;
-      const xOffset = (pageWidth - scaledWidth) / 2;
-      pdf.addImage(imgData, 'PNG', xOffset, 0, scaledWidth, scaledHeight);
+      if (i > 0) {
+        pdf.addPage();
+      }
+
+      const container = document.createElement('div');
+      container.style.position = 'absolute';
+      container.style.left = '-9999px';
+      container.style.top = '0';
+      container.style.width = '794px';
+      container.style.padding = '40px';
+      container.style.backgroundColor = '#ffffff';
+      container.style.fontFamily = 'Arial, sans-serif';
+      container.style.direction = 'rtl';
+      document.body.appendChild(container);
+
+      container.innerHTML = `
+        <div style="text-align: center; margin-bottom: 20px;">
+          <h1 style="color: #654321; font-size: 32px; margin-bottom: 10px;">${t.detection.pdf.reportTitle}</h1>
+          <div style="color: #D4AF37; font-size: 18px;">الترتيب #${ranking} من ${sortedResults.length}</div>
+        </div>
+
+        <div style="text-align: center; margin-bottom: 30px;">
+          <img src="${result.image_url}" style="max-width: 400px; max-height: 300px; border-radius: 8px;" crossorigin="anonymous" />
+        </div>
+
+        <div style="background: linear-gradient(135deg, #D4AF37, #C4A028); padding: 20px; border-radius: 8px; margin-bottom: 30px; text-align: center;">
+          <div style="color: white; font-size: 20px; margin-bottom: 10px;">${t.detection.pdf.overallScore}</div>
+          <div style="color: white; font-size: 48px; font-weight: bold;">${result.overall_score.toFixed(1)}</div>
+          <div style="color: white; font-size: 24px; margin-top: 10px;">${'★'.repeat(Math.round((result.overall_score / 100) * 5))}${'☆'.repeat(5 - Math.round((result.overall_score / 100) * 5))}</div>
+        </div>
+
+        <div style="background: ${result.category === 'beautiful' ? '#10B981' : '#EF4444'}; color: white; padding: 12px 20px; border-radius: 8px; display: inline-block; margin-bottom: 20px;">
+          ${result.category === 'beautiful' ? '✨ ' + t.detection.beautiful : '⚠️ ' + t.detection.pdf.needsImprovement}
+        </div>
+        <span style="margin-right: 20px; color: #666; font-size: 14px;">${t.detection.confidence}: ${result.confidence.toFixed(1)}%</span>
+
+        <h2 style="color: #654321; font-size: 20px; margin: 30px 0 15px;">${t.detection.pdf.detailedScores}</h2>
+
+        <div style="margin-bottom: 15px; background: #FAF5EB; padding: 15px; border-radius: 8px; border: 2px solid #D2B48C;">
+          <span style="font-size: 16px;">👤 ${t.detection.headBeauty}</span>
+          <span style="float: left; font-size: 20px; color: #D4AF37; font-weight: bold;">${result.head_beauty_score.toFixed(1)}</span>
+        </div>
+
+        <div style="margin-bottom: 15px; background: #FAF5EB; padding: 15px; border-radius: 8px; border: 2px solid #D2B48C;">
+          <span style="font-size: 16px;">🦒 ${t.detection.neckBeauty}</span>
+          <span style="float: left; font-size: 20px; color: #D4AF37; font-weight: bold;">${result.neck_beauty_score.toFixed(1)}</span>
+        </div>
+
+        <div style="margin-bottom: 15px; background: #FAF5EB; padding: 15px; border-radius: 8px; border: 2px solid #D2B48C;">
+          <span style="font-size: 16px;">🐪 ${t.detection.bodyHumpLimbs}</span>
+          <span style="float: left; font-size: 20px; color: #D4AF37; font-weight: bold;">${result.body_hump_limbs_score.toFixed(1)}</span>
+        </div>
+
+        <div style="margin-bottom: 15px; background: #FAF5EB; padding: 15px; border-radius: 8px; border: 2px solid #D2B48C;">
+          <span style="font-size: 16px;">📏 ${t.detection.bodySize}</span>
+          <span style="float: left; font-size: 20px; color: #D4AF37; font-weight: bold;">${result.body_size_score.toFixed(1)}</span>
+        </div>
+
+        <h3 style="color: #654321; font-size: 18px; margin: 30px 0 15px;">${t.detection.pdf.quickStats}</h3>
+
+        <div style="display: flex; gap: 20px; margin-bottom: 40px;">
+          <div style="flex: 1; background: #DCFCE7; padding: 15px; border-radius: 8px;">
+            <div style="color: #666; font-size: 14px; margin-bottom: 5px;">${t.detection.pdf.highestScore}</div>
+            <div style="color: #22C55E; font-size: 24px; font-weight: bold;">${Math.max(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score).toFixed(1)}</div>
+          </div>
+          <div style="flex: 1; background: #FEE2E2; padding: 15px; border-radius: 8px;">
+            <div style="color: #666; font-size: 14px; margin-bottom: 5px;">${t.detection.pdf.lowestScore}</div>
+            <div style="color: #EF4444; font-size: 24px; font-weight: bold;">${Math.min(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score).toFixed(1)}</div>
+          </div>
+        </div>
+
+        <div style="text-align: center; color: #999; font-size: 12px; margin-top: 40px;">
+          ${t.detection.pdf.generatedBy}
+        </div>
+      `;
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      const canvas = await html2canvas(container, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+      });
+
+      document.body.removeChild(container);
+
+      const imgData = canvas.toDataURL('image/png');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      const imgWidth = pageWidth;
+      const imgHeight = (canvas.height * pageWidth) / canvas.width;
+
+      if (imgHeight <= pageHeight) {
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      } else {
+        const scaledHeight = pageHeight;
+        const scaledWidth = (canvas.width * pageHeight) / canvas.height;
+        const xOffset = (pageWidth - scaledWidth) / 2;
+        pdf.addImage(imgData, 'PNG', xOffset, 0, scaledWidth, scaledHeight);
+      }
     }
 
-    pdf.save(`camel-detection-${result.id}.pdf`);
+    pdf.save(`camel-detection-rankings-${Date.now()}.pdf`);
   };
 
   const handleExport = async (format: 'pdf' | 'json' | 'png') => {
-    const currentResult = detectionResults[currentResultIndex];
-    if (!currentResult) return;
+    if (format !== 'pdf') return;
 
-    if (format === 'pdf') {
-      if (language === 'ar') {
-        await generateArabicPDF(currentResult);
-        return;
+    const sortedResults = [...detectionResults].sort((a, b) => b.overall_score - a.overall_score);
+
+    if (language === 'ar') {
+      await generateArabicPDF(sortedResults);
+      return;
+    }
+
+    const pdf = new jsPDF();
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+
+    for (let i = 0; i < sortedResults.length; i++) {
+      const result = sortedResults[i];
+      const ranking = i + 1;
+
+      if (i > 0) {
+        pdf.addPage();
       }
 
-      const pdf = new jsPDF();
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
       let yPosition = 20;
 
       pdf.setFontSize(22);
       pdf.setTextColor(101, 67, 33);
       pdf.text(t.detection.pdf.reportTitle, pageWidth / 2, yPosition, { align: 'center' });
-      yPosition += 20;
+      yPosition += 10;
+
+      pdf.setFontSize(14);
+      pdf.setTextColor(212, 175, 55);
+      pdf.text(`Rank #${ranking} of ${sortedResults.length}`, pageWidth / 2, yPosition, { align: 'center' });
+      yPosition += 15;
 
       try {
         const img = new Image();
@@ -419,7 +441,7 @@ export default function CamelDetection() {
         await new Promise((resolve, reject) => {
           img.onload = resolve;
           img.onerror = reject;
-          img.src = currentResult.image_url;
+          img.src = result.image_url;
         });
 
         const imgWidth = 80;
@@ -440,14 +462,14 @@ export default function CamelDetection() {
       pdf.text(t.detection.pdf.overallScore, 20, yPosition + 12);
 
       pdf.setFontSize(32);
-      pdf.text(currentResult.overall_score.toFixed(1), pageWidth - 25, yPosition + 28, { align: 'right' });
+      pdf.text(result.overall_score.toFixed(1), pageWidth - 25, yPosition + 28, { align: 'right' });
 
-      const stars = Math.round((currentResult.overall_score / 100) * 5);
+      const stars = Math.round((result.overall_score / 100) * 5);
       pdf.setFontSize(20);
       pdf.text('★'.repeat(stars) + '☆'.repeat(5 - stars), 20, yPosition + 32);
       yPosition += 50;
 
-      if (currentResult.category === 'beautiful') {
+      if (result.category === 'beautiful') {
         pdf.setFillColor(16, 185, 129);
       } else {
         pdf.setFillColor(239, 68, 68);
@@ -455,14 +477,14 @@ export default function CamelDetection() {
       pdf.roundedRect(15, yPosition, 80, 12, 3, 3, 'F');
       pdf.setFontSize(12);
       pdf.setTextColor(255, 255, 255);
-      const categoryText = currentResult.category === 'beautiful'
+      const categoryText = result.category === 'beautiful'
         ? `✨ ${t.detection.beautiful}`
         : `⚠️ ${t.detection.pdf.needsImprovement}`;
       pdf.text(categoryText, 20, yPosition + 8);
 
       pdf.setFontSize(10);
       pdf.setTextColor(100, 100, 100);
-      pdf.text(`${t.detection.confidence}: ${currentResult.confidence.toFixed(1)}%`, 100, yPosition + 8);
+      pdf.text(`${t.detection.confidence}: ${result.confidence.toFixed(1)}%`, 100, yPosition + 8);
       yPosition += 25;
 
       pdf.setFontSize(14);
@@ -471,10 +493,10 @@ export default function CamelDetection() {
       yPosition += 10;
 
       const scores = [
-        { label: t.detection.headBeauty, value: currentResult.head_beauty_score, icon: '👤' },
-        { label: t.detection.neckBeauty, value: currentResult.neck_beauty_score, icon: '🦒' },
-        { label: t.detection.bodyHumpLimbs, value: currentResult.body_hump_limbs_score, icon: '🐪' },
-        { label: t.detection.bodySize, value: currentResult.body_size_score, icon: '📏' },
+        { label: t.detection.headBeauty, value: result.head_beauty_score, icon: '👤' },
+        { label: t.detection.neckBeauty, value: result.neck_beauty_score, icon: '🦒' },
+        { label: t.detection.bodyHumpLimbs, value: result.body_hump_limbs_score, icon: '🐪' },
+        { label: t.detection.bodySize, value: result.body_size_score, icon: '📏' },
       ];
 
       scores.forEach((score, index) => {
@@ -497,16 +519,16 @@ export default function CamelDetection() {
       yPosition += 90;
 
       const maxScore = Math.max(
-        currentResult.head_beauty_score,
-        currentResult.neck_beauty_score,
-        currentResult.body_hump_limbs_score,
-        currentResult.body_size_score
+        result.head_beauty_score,
+        result.neck_beauty_score,
+        result.body_hump_limbs_score,
+        result.body_size_score
       );
       const minScore = Math.min(
-        currentResult.head_beauty_score,
-        currentResult.neck_beauty_score,
-        currentResult.body_hump_limbs_score,
-        currentResult.body_size_score
+        result.head_beauty_score,
+        result.neck_beauty_score,
+        result.body_hump_limbs_score,
+        result.body_size_score
       );
 
       pdf.setFontSize(12);
@@ -540,23 +562,15 @@ export default function CamelDetection() {
         pageHeight - 10,
         { align: 'center' }
       );
-
-      pdf.save(`camel-detection-${currentResult.id}.pdf`);
     }
+
+    pdf.save(`camel-detection-rankings-${Date.now()}.pdf`);
   };
 
   return (
     <Layout>
       <div className="min-h-screen bg-gradient-to-br from-sand-50 via-cream-50 to-gold-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-brown-700 hover:text-brown-900 mb-6 md:mb-8 transition-colors font-arabic text-sm sm:text-base"
-        >
-          <ArrowLeft className="w-4 sm:w-5 h-4 sm:h-5" />
-          {t.common.back}
-        </button>
-
         <div className="mb-8 md:mb-12 text-center">
           <div className="flex items-center justify-center gap-2 md:gap-3 mb-3 md:mb-4">
             <Sparkles className="w-8 sm:w-10 h-8 sm:h-10 text-gold-600" />
