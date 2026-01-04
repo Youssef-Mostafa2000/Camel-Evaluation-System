@@ -109,7 +109,7 @@ export default function DetectionResults({
               </div>
 
               <div className="mt-4 text-sm text-gray-600 font-arabic">
-                <span className="font-medium">{t.detection.confidence}:</span> {result.confidence.toFixed(1)}%
+                <span className="font-medium">{t.detection.confidence}:</span> {result.confidence}%
               </div>
             </div>
 
