@@ -97,7 +97,7 @@ export default function DetectionResults({
           <div className="space-y-6">
             <div className="bg-white rounded-xl p-6 shadow-md">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-semibold text-brown-800 font-arabic">{Math.round(Number(t.detection.beautyScore))}</h3>
+                <h3 className="text-xl font-semibold text-brown-800 font-arabic">{t.detection.beautyScore}</h3>
                 <span className="text-5xl font-bold text-gold-600">
                   {result.overall_score.toFixed(1)}
                 </span>
