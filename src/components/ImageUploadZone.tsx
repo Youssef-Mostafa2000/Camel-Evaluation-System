@@ -20,7 +20,7 @@ interface ImageUploadZoneProps {
 export default function ImageUploadZone({
   onFilesSelected,
   maxFiles = 50,
-  acceptedFormats = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
+  acceptedFormats = ['image/*'],
   maxFileSize = 10 * 1024 * 1024,
 }: ImageUploadZoneProps) {
   const { t } = useLanguage();
@@ -28,9 +28,55 @@ export default function ImageUploadZone({
   const [selectedFiles, setSelectedFiles] = useState<ImageFile[]>([]);
   const [error, setError] = useState<string>('');
 
+  const convertImageToJPG = async (file: File): Promise<File> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            reject(new Error('Failed to get canvas context'));
+            return;
+          }
+
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0);
+
+          canvas.toBlob(
+            (blob) => {
+              if (!blob) {
+                reject(new Error('Failed to convert image'));
+                return;
+              }
+
+              const originalName = file.name.replace(/\.[^/.]+$/, '');
+              const jpgFile = new File([blob], `${originalName}.jpg`, {
+                type: 'image/jpeg',
+                lastModified: Date.now(),
+              });
+              resolve(jpgFile);
+            },
+            'image/jpeg',
+            0.92
+          );
+        };
+        img.onerror = () => reject(new Error('Failed to load image'));
+        img.src = e.target?.result as string;
+      };
+      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.readAsDataURL(file);
+    });
+  };
+
   const validateFile = (file: File): string | null => {
-    if (!acceptedFormats.includes(file.type)) {
-      return t.detection.errors.invalidFileType.replace('{formats}', acceptedFormats.join(', '));
+    if (!file.type.startsWith('image/')) {
+      return t.detection.errors.invalidFileType.replace('{formats}', 'images');
     }
     if (file.size > maxFileSize) {
       return t.detection.errors.fileTooLarge.replace('{size}', String(maxFileSize / 1024 / 1024));
@@ -38,7 +84,7 @@ export default function ImageUploadZone({
     return null;
   };
 
-  const handleFiles = useCallback((files: FileList | null) => {
+  const handleFiles = useCallback(async (files: FileList | null) => {
     if (!files) return;
 
     const fileArray = Array.from(files);
@@ -52,29 +98,36 @@ export default function ImageUploadZone({
     setError('');
     const validFiles: ImageFile[] = [];
 
-    fileArray.forEach((file) => {
+    for (const file of fileArray) {
       const validationError = validateFile(file);
       if (validationError) {
         setError(validationError);
-        return;
+        continue;
       }
 
-      const id = Math.random().toString(36).substring(7);
-      const preview = URL.createObjectURL(file);
-      validFiles.push({
-        id,
-        file,
-        preview,
-        status: 'pending',
-      });
-    });
+      try {
+        const convertedFile = await convertImageToJPG(file);
+        const id = Math.random().toString(36).substring(7);
+        const preview = URL.createObjectURL(convertedFile);
+
+        validFiles.push({
+          id,
+          file: convertedFile,
+          preview,
+          status: 'pending',
+        });
+      } catch (err) {
+        console.error('Failed to convert image:', err);
+        setError(`Failed to convert ${file.name}`);
+      }
+    }
 
     if (validFiles.length > 0) {
       const newFiles = [...selectedFiles, ...validFiles];
       setSelectedFiles(newFiles);
       onFilesSelected(newFiles.map(f => f.file));
     }
-  }, [selectedFiles, maxFiles, acceptedFormats, maxFileSize, onFilesSelected]);
+  }, [selectedFiles, maxFiles, acceptedFormats, maxFileSize, onFilesSelected, t]);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
