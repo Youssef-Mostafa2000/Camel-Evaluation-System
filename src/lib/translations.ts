@@ -339,7 +339,7 @@ export const translations = {
     },
     landing: {
       badge: "AI Meets Authenticity",
-      title: "Andal - World's First AI-Based Camel Beauty Evaluation Platform",
+      title: "World's First AI-Based Camel Beauty Evaluation Platform",
       subtitle:
         "Fair, transparent, and fast evaluation using cutting-edge AI technology",
       cta1: "Register Now",
