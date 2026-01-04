@@ -350,7 +350,7 @@ export default function CamelDetection() {
 
         <div style="background: linear-gradient(135deg, #D4AF37, #C4A028); padding: 20px; border-radius: 8px; margin-bottom: 30px; text-align: center;">
           <div style="color: white; font-size: 20px; margin-bottom: 10px;">${t.detection.pdf.overallScore}</div>
-          <div style="color: white; font-size: 48px; font-weight: bold;">${result.overall_score.toFixed(1)}</div>
+          <div style="color: white; font-size: 48px; font-weight: bold;">${result.overall_score}</div>
           <div style="color: white; font-size: 24px; margin-top: 10px;">${'★'.repeat(Math.round((result.overall_score / 100) * 5))}${'☆'.repeat(5 - Math.round((result.overall_score / 100) * 5))}</div>
         </div>
 
@@ -369,19 +369,19 @@ export default function CamelDetection() {
 
         <div style="margin-bottom: 15px; background: ${neckColor.bg}; padding: 15px; border-radius: 8px; border: 2px solid ${neckColor.border};">
           <span style="font-size: 16px;">🦒 ${t.detection.neckBeauty}</span>
-          <span style="float: left; font-size: 20px; color: ${neckColor.text}; font-weight: bold;">${result.neck_beauty_score.toFixed(1)}</span>
+          <span style="float: left; font-size: 20px; color: ${neckColor.text}; font-weight: bold;">${result.neck_beauty_score}</span>
           <div style="clear: both; margin-top: 5px; font-size: 14px; color: #666;">${getScoreGrade(result.neck_beauty_score, 'ar')}</div>
         </div>
 
         <div style="margin-bottom: 15px; background: ${bodyColor.bg}; padding: 15px; border-radius: 8px; border: 2px solid ${bodyColor.border};">
           <span style="font-size: 16px;">🐪 ${t.detection.bodyHumpLimbs}</span>
-          <span style="float: left; font-size: 20px; color: ${bodyColor.text}; font-weight: bold;">${result.body_hump_limbs_score.toFixed(1)}</span>
+          <span style="float: left; font-size: 20px; color: ${bodyColor.text}; font-weight: bold;">${result.body_hump_limbs_score}</span>
           <div style="clear: both; margin-top: 5px; font-size: 14px; color: #666;">${getScoreGrade(result.body_hump_limbs_score, 'ar')}</div>
         </div>
 
         <div style="margin-bottom: 15px; background: ${sizeColor.bg}; padding: 15px; border-radius: 8px; border: 2px solid ${sizeColor.border};">
           <span style="font-size: 16px;">📏 ${t.detection.bodySize}</span>
-          <span style="float: left; font-size: 20px; color: ${sizeColor.text}; font-weight: bold;">${result.body_size_score.toFixed(1)}</span>
+          <span style="float: left; font-size: 20px; color: ${sizeColor.text}; font-weight: bold;">${result.body_size_score}</span>
           <div style="clear: both; margin-top: 5px; font-size: 14px; color: #666;">${getScoreGrade(result.body_size_score, 'ar')}</div>
         </div>
 
@@ -396,7 +396,7 @@ export default function CamelDetection() {
             <div style="color: ${(() => {
               const max = Math.max(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score);
               return getScoreColor(max).text;
-            })()}; font-size: 24px; font-weight: bold;">${Math.max(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score).toFixed(1)}</div>
+            })()}; font-size: 24px; font-weight: bold;">${Math.max(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score)}</div>
             <div style="color: #666; font-size: 12px; margin-top: 5px;">${getScoreGrade(Math.max(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score), 'ar')}</div>
           </div>
           <div style="flex: 1; background: ${(() => {
@@ -407,7 +407,7 @@ export default function CamelDetection() {
             <div style="color: ${(() => {
               const min = Math.min(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score);
               return getScoreColor(min).text;
-            })()}; font-size: 24px; font-weight: bold;">${Math.min(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score).toFixed(1)}</div>
+            })()}; font-size: 24px; font-weight: bold;">${Math.min(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score)}</div>
             <div style="color: #666; font-size: 12px; margin-top: 5px;">${getScoreGrade(Math.min(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score), 'ar')}</div>
           </div>
         </div>
