@@ -114,10 +114,10 @@ export default function DetectionResults({
             </div>
 
             <div className="bg-white rounded-xl p-6 shadow-md">
-              <h3 className="text-lg font-semibold text-brown-800 mb-4">${t.detection.pdf.quickStats}</h3>
+              <h3 className="text-lg font-semibold text-brown-800 mb-4">{t.detection.pdf.quickStats}</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-gray-600">${t.detection.pdf.highestScore}</p>
+                  <p className="text-sm text-gray-600">{t.detection.pdf.highestScore}</p>
                   <p className="text-xl font-bold text-green-600">
                     {Math.max(
                       result.head_beauty_score,
@@ -128,7 +128,7 @@ export default function DetectionResults({
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">${t.detection.pdf.lowestScore}</p>
+                  <p className="text-sm text-gray-600">{t.detection.pdf.lowestScore}</p>
                   <p className="text-xl font-bold text-red-600">
                     {Math.min(
                       result.head_beauty_score,
