@@ -68,7 +68,7 @@ export default function BeautyScoreCard({
           <h3 className="font-semibold text-brown-800">{label}</h3>
         </div>
         <span className={`text-2xl font-bold ${colors.text}`}>
-          {score.toFixed(1)}
+          {score}
         </span>
       </div>
 
