@@ -241,6 +241,12 @@ export default function CamelDetection() {
     }
   };
 
+  const getScoreColor = (score: number) => {
+    if (score >= 80) return { bg: '#DCFCE7', text: '#22C55E', border: '#BBF7D0' };
+    if (score >= 60) return { bg: '#FEF3C7', text: '#EAB308', border: '#FDE68A' };
+    return { bg: '#FEE2E2', text: '#EF4444', border: '#FECACA' };
+  };
+
   const handleGenerateRecommendation = async (type: 'care' | 'breeding' | 'health') => {
     const currentResult = detectionResults[currentResultIndex];
     if (!currentResult) return;
@@ -309,14 +315,19 @@ export default function CamelDetection() {
       container.style.direction = 'rtl';
       document.body.appendChild(container);
 
+      const headColor = getScoreColor(result.head_beauty_score);
+      const neckColor = getScoreColor(result.neck_beauty_score);
+      const bodyColor = getScoreColor(result.body_hump_limbs_score);
+      const sizeColor = getScoreColor(result.body_size_score);
+
       container.innerHTML = `
         <div style="text-align: center; margin-bottom: 20px;">
           <h1 style="color: #654321; font-size: 32px; margin-bottom: 10px;">${t.detection.pdf.reportTitle}</h1>
           <div style="color: #D4AF37; font-size: 18px;">الترتيب #${ranking} من ${sortedResults.length}</div>
         </div>
 
-        <div style="text-align: center; margin-bottom: 30px;">
-          <img src="${result.image_url}" style="max-width: 400px; max-height: 300px; border-radius: 8px;" crossorigin="anonymous" />
+        <div style="text-align: center; margin-bottom: 30px; display: flex; justify-content: center; align-items: center;">
+          <img src="${result.image_url}" style="max-width: 400px; max-height: 300px; border-radius: 8px; display: block;" crossorigin="anonymous" />
         </div>
 
         <div style="background: linear-gradient(135deg, #D4AF37, #C4A028); padding: 20px; border-radius: 8px; margin-bottom: 30px; text-align: center;">
@@ -332,36 +343,48 @@ export default function CamelDetection() {
 
         <h2 style="color: #654321; font-size: 20px; margin: 30px 0 15px;">${t.detection.pdf.detailedScores}</h2>
 
-        <div style="margin-bottom: 15px; background: #FAF5EB; padding: 15px; border-radius: 8px; border: 2px solid #D2B48C;">
+        <div style="margin-bottom: 15px; background: ${headColor.bg}; padding: 15px; border-radius: 8px; border: 2px solid ${headColor.border};">
           <span style="font-size: 16px;">👤 ${t.detection.headBeauty}</span>
-          <span style="float: left; font-size: 20px; color: #D4AF37; font-weight: bold;">${result.head_beauty_score.toFixed(1)}</span>
+          <span style="float: left; font-size: 20px; color: ${headColor.text}; font-weight: bold;">${result.head_beauty_score.toFixed(1)}</span>
         </div>
 
-        <div style="margin-bottom: 15px; background: #FAF5EB; padding: 15px; border-radius: 8px; border: 2px solid #D2B48C;">
+        <div style="margin-bottom: 15px; background: ${neckColor.bg}; padding: 15px; border-radius: 8px; border: 2px solid ${neckColor.border};">
           <span style="font-size: 16px;">🦒 ${t.detection.neckBeauty}</span>
-          <span style="float: left; font-size: 20px; color: #D4AF37; font-weight: bold;">${result.neck_beauty_score.toFixed(1)}</span>
+          <span style="float: left; font-size: 20px; color: ${neckColor.text}; font-weight: bold;">${result.neck_beauty_score.toFixed(1)}</span>
         </div>
 
-        <div style="margin-bottom: 15px; background: #FAF5EB; padding: 15px; border-radius: 8px; border: 2px solid #D2B48C;">
+        <div style="margin-bottom: 15px; background: ${bodyColor.bg}; padding: 15px; border-radius: 8px; border: 2px solid ${bodyColor.border};">
           <span style="font-size: 16px;">🐪 ${t.detection.bodyHumpLimbs}</span>
-          <span style="float: left; font-size: 20px; color: #D4AF37; font-weight: bold;">${result.body_hump_limbs_score.toFixed(1)}</span>
+          <span style="float: left; font-size: 20px; color: ${bodyColor.text}; font-weight: bold;">${result.body_hump_limbs_score.toFixed(1)}</span>
         </div>
 
-        <div style="margin-bottom: 15px; background: #FAF5EB; padding: 15px; border-radius: 8px; border: 2px solid #D2B48C;">
+        <div style="margin-bottom: 15px; background: ${sizeColor.bg}; padding: 15px; border-radius: 8px; border: 2px solid ${sizeColor.border};">
           <span style="font-size: 16px;">📏 ${t.detection.bodySize}</span>
-          <span style="float: left; font-size: 20px; color: #D4AF37; font-weight: bold;">${result.body_size_score.toFixed(1)}</span>
+          <span style="float: left; font-size: 20px; color: ${sizeColor.text}; font-weight: bold;">${result.body_size_score.toFixed(1)}</span>
         </div>
 
         <h3 style="color: #654321; font-size: 18px; margin: 30px 0 15px;">${t.detection.pdf.quickStats}</h3>
 
         <div style="display: flex; gap: 20px; margin-bottom: 40px;">
-          <div style="flex: 1; background: #DCFCE7; padding: 15px; border-radius: 8px;">
+          <div style="flex: 1; background: ${(() => {
+            const max = Math.max(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score);
+            return getScoreColor(max).bg;
+          })()}; padding: 15px; border-radius: 8px;">
             <div style="color: #666; font-size: 14px; margin-bottom: 5px;">${t.detection.pdf.highestScore}</div>
-            <div style="color: #22C55E; font-size: 24px; font-weight: bold;">${Math.max(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score).toFixed(1)}</div>
+            <div style="color: ${(() => {
+              const max = Math.max(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score);
+              return getScoreColor(max).text;
+            })()}; font-size: 24px; font-weight: bold;">${Math.max(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score).toFixed(1)}</div>
           </div>
-          <div style="flex: 1; background: #FEE2E2; padding: 15px; border-radius: 8px;">
+          <div style="flex: 1; background: ${(() => {
+            const min = Math.min(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score);
+            return getScoreColor(min).bg;
+          })()}; padding: 15px; border-radius: 8px;">
             <div style="color: #666; font-size: 14px; margin-bottom: 5px;">${t.detection.pdf.lowestScore}</div>
-            <div style="color: #EF4444; font-size: 24px; font-weight: bold;">${Math.min(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score).toFixed(1)}</div>
+            <div style="color: ${(() => {
+              const min = Math.min(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score);
+              return getScoreColor(min).text;
+            })()}; font-size: 24px; font-weight: bold;">${Math.min(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score).toFixed(1)}</div>
           </div>
         </div>
 
@@ -501,11 +524,20 @@ export default function CamelDetection() {
 
       scores.forEach((score, index) => {
         const boxY = yPosition + (index * 20);
+        const scoreColor = getScoreColor(score.value);
 
-        pdf.setFillColor(250, 245, 235);
+        pdf.setFillColor(
+          parseInt(scoreColor.bg.slice(1, 3), 16),
+          parseInt(scoreColor.bg.slice(3, 5), 16),
+          parseInt(scoreColor.bg.slice(5, 7), 16)
+        );
         pdf.roundedRect(15, boxY, pageWidth - 30, 15, 2, 2, 'F');
 
-        pdf.setDrawColor(210, 180, 140);
+        pdf.setDrawColor(
+          parseInt(scoreColor.border.slice(1, 3), 16),
+          parseInt(scoreColor.border.slice(3, 5), 16),
+          parseInt(scoreColor.border.slice(5, 7), 16)
+        );
         pdf.roundedRect(15, boxY, pageWidth - 30, 15, 2, 2, 'S');
 
         pdf.setFontSize(11);
@@ -513,7 +545,11 @@ export default function CamelDetection() {
         pdf.text(`${score.icon} ${score.label}`, 20, boxY + 10);
 
         pdf.setFontSize(14);
-        pdf.setTextColor(212, 175, 55);
+        pdf.setTextColor(
+          parseInt(scoreColor.text.slice(1, 3), 16),
+          parseInt(scoreColor.text.slice(3, 5), 16),
+          parseInt(scoreColor.text.slice(5, 7), 16)
+        );
         pdf.text(score.value.toFixed(1), pageWidth - 25, boxY + 10, { align: 'right' });
       });
       yPosition += 90;
@@ -531,27 +567,46 @@ export default function CamelDetection() {
         result.body_size_score
       );
 
+      const maxColor = getScoreColor(maxScore);
+      const minColor = getScoreColor(minScore);
+
       pdf.setFontSize(12);
       pdf.setTextColor(101, 67, 33);
       pdf.text(t.detection.pdf.quickStats, 15, yPosition);
       yPosition += 8;
 
-      pdf.setFillColor(220, 252, 231);
+      pdf.setFillColor(
+        parseInt(maxColor.bg.slice(1, 3), 16),
+        parseInt(maxColor.bg.slice(3, 5), 16),
+        parseInt(maxColor.bg.slice(5, 7), 16)
+      );
       pdf.roundedRect(15, yPosition, (pageWidth - 35) / 2, 20, 2, 2, 'F');
       pdf.setFontSize(10);
       pdf.setTextColor(100, 100, 100);
       pdf.text(t.detection.pdf.highestScore, 20, yPosition + 8);
       pdf.setFontSize(16);
-      pdf.setTextColor(34, 197, 94);
+      pdf.setTextColor(
+        parseInt(maxColor.text.slice(1, 3), 16),
+        parseInt(maxColor.text.slice(3, 5), 16),
+        parseInt(maxColor.text.slice(5, 7), 16)
+      );
       pdf.text(maxScore.toFixed(1), 20, yPosition + 16);
 
-      pdf.setFillColor(254, 226, 226);
+      pdf.setFillColor(
+        parseInt(minColor.bg.slice(1, 3), 16),
+        parseInt(minColor.bg.slice(3, 5), 16),
+        parseInt(minColor.bg.slice(5, 7), 16)
+      );
       pdf.roundedRect((pageWidth / 2) + 2.5, yPosition, (pageWidth - 35) / 2, 20, 2, 2, 'F');
       pdf.setFontSize(10);
       pdf.setTextColor(100, 100, 100);
       pdf.text(t.detection.pdf.lowestScore, (pageWidth / 2) + 7.5, yPosition + 8);
       pdf.setFontSize(16);
-      pdf.setTextColor(239, 68, 68);
+      pdf.setTextColor(
+        parseInt(minColor.text.slice(1, 3), 16),
+        parseInt(minColor.text.slice(3, 5), 16),
+        parseInt(minColor.text.slice(5, 7), 16)
+      );
       pdf.text(minScore.toFixed(1), (pageWidth / 2) + 7.5, yPosition + 16);
 
       pdf.setFontSize(8);
