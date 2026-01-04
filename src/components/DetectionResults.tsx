@@ -4,7 +4,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 interface DetectionResult {
   id?: string;
-  overall_score: number;
+  overall_score: integer;
   head_beauty_score: number;
   neck_beauty_score: number;
   body_hump_limbs_score: number;
