@@ -30,10 +30,10 @@ export default function ImageUploadZone({
 
   const validateFile = (file: File): string | null => {
     if (!acceptedFormats.includes(file.type)) {
-      return `Invalid file type. Accepted: ${acceptedFormats.join(', ')}`;
+      return t.detection.errors.invalidFileType.replace('{formats}', acceptedFormats.join(', '));
     }
     if (file.size > maxFileSize) {
-      return `File too large. Max size: ${maxFileSize / 1024 / 1024}MB`;
+      return t.detection.errors.fileTooLarge.replace('{size}', String(maxFileSize / 1024 / 1024));
     }
     return null;
   };
@@ -45,7 +45,7 @@ export default function ImageUploadZone({
     const totalFiles = selectedFiles.length + fileArray.length;
 
     if (totalFiles > maxFiles) {
-      setError(`Maximum ${maxFiles} files allowed`);
+      setError(t.detection.errors.maxFilesExceeded.replace('{count}', String(maxFiles)));
       return;
     }
 
@@ -164,8 +164,8 @@ export default function ImageUploadZone({
 
           <div className="text-sm text-sand-600 space-y-1 font-arabic">
             <p>{t.detection.uploadHint}</p>
-            <p>Maximum file size: {maxFileSize / 1024 / 1024}MB per image</p>
-            <p>Maximum {maxFiles} images at once</p>
+            <p>{t.detection.maxFileSize.replace('{size}', String(maxFileSize / 1024 / 1024))}</p>
+            <p>{t.detection.maxImages.replace('{count}', String(maxFiles))}</p>
           </div>
         </div>
       </div>
@@ -180,14 +180,14 @@ export default function ImageUploadZone({
       {selectedFiles.length > 0 && (
         <div className="mt-8">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-lg font-semibold text-brown-700">
-              Selected Images ({selectedFiles.length})
+            <h4 className="text-lg font-semibold text-brown-700 font-arabic">
+              {t.detection.selectedImages.replace('{count}', String(selectedFiles.length))}
             </h4>
             <button
               onClick={clearAll}
-              className="text-sm text-red-600 hover:text-red-700 font-medium"
+              className="text-sm text-red-600 hover:text-red-700 font-medium font-arabic"
             >
-              Clear All
+              {t.detection.clearAll}
             </button>
           </div>
 

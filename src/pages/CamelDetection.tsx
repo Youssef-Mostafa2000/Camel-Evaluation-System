@@ -79,13 +79,13 @@ export default function CamelDetection() {
     });
 
     if (!response.ok) {
-      throw new Error('Detection failed. Please try again.');
+      throw new Error(t.detection.errors.detectionFailed);
     }
 
     const data = await response.json();
 
     if (!data.success || !data.results) {
-      throw new Error('Invalid response from detection service');
+      throw new Error(t.detection.errors.invalidResponse);
     }
 
     const scores = data.results.scores_dict;
@@ -170,7 +170,7 @@ export default function CamelDetection() {
         });
 
         if (!response.ok) {
-          throw new Error('Batch detection failed. Please try again.');
+          throw new Error(t.detection.errors.batchFailed);
         }
 
         const data = await response.json();
@@ -178,12 +178,12 @@ export default function CamelDetection() {
         console.log('Batch response data:', data);
 
         if (!data.success) {
-          throw new Error(data.error || 'Detection failed');
+          throw new Error(data.error || t.detection.errors.detectionFailed);
         }
 
         if (!data.items || !Array.isArray(data.items)) {
           console.error('Invalid batch response structure:', data);
-          throw new Error('Invalid response from detection service. Please check console for details.');
+          throw new Error(t.detection.errors.invalidResponse);
         }
 
         data.items.forEach((item: any, index: number) => {
@@ -234,7 +234,7 @@ export default function CamelDetection() {
       setCurrentResultIndex(0);
     } catch (err: any) {
       console.error('Detection error:', err);
-      setError(err.message || 'Failed to process images. Please try again.');
+      setError(err.message || t.detection.errors.processingFailed);
       setCurrentStep('upload');
     } finally {
       setProcessing(false);
@@ -295,7 +295,7 @@ export default function CamelDetection() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to generate recommendation');
+        throw new Error(t.detection.errors.recommendationFailed);
       }
 
       const data = await response.json();
@@ -305,7 +305,7 @@ export default function CamelDetection() {
       });
     } catch (err: any) {
       console.error('Recommendation error:', err);
-      setError('Failed to generate recommendation. Please try again.');
+      setError(t.detection.errors.recommendationFailed);
     } finally {
       setLoadingRecommendation(false);
     }
@@ -341,7 +341,7 @@ export default function CamelDetection() {
       container.innerHTML = `
         <div style="text-align: center; margin-bottom: 20px;">
           <h1 style="color: #654321; font-size: 32px; margin-bottom: 10px;">${t.detection.pdf.reportTitle}</h1>
-          <div style="color: #D4AF37; font-size: 18px;">الترتيب #${ranking} من ${sortedResults.length}</div>
+          <div style="color: #D4AF37; font-size: 18px;">${t.detection.ranking.replace('{rank}', String(ranking)).replace('{total}', String(sortedResults.length))}</div>
         </div>
 
         <div style="text-align: center; margin-bottom: 30px; display: flex; justify-content: center; align-items: center;">
@@ -479,7 +479,7 @@ export default function CamelDetection() {
 
       pdf.setFontSize(14);
       pdf.setTextColor(212, 175, 55);
-      pdf.text(`Rank #${ranking} of ${sortedResults.length}`, pageWidth / 2, yPosition, { align: 'center' });
+      pdf.text(t.detection.ranking.replace('{rank}', String(ranking)).replace('{total}', String(sortedResults.length)), pageWidth / 2, yPosition, { align: 'center' });
       yPosition += 15;
 
       try {
