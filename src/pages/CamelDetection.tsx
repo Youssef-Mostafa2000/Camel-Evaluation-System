@@ -247,6 +247,24 @@ export default function CamelDetection() {
     return { bg: '#FEE2E2', text: '#EF4444', border: '#FECACA' };
   };
 
+  const getScoreGrade = (score: number, lang: string = 'en') => {
+    if (lang === 'ar') {
+      if (score >= 90) return 'استثنائي';
+      if (score >= 80) return 'ممتاز';
+      if (score >= 70) return 'جيد جداً';
+      if (score >= 60) return 'جيد';
+      if (score >= 50) return 'مقبول';
+      return 'يحتاج تحسين';
+    } else {
+      if (score >= 90) return 'Exceptional';
+      if (score >= 80) return 'Excellent';
+      if (score >= 70) return 'Very Good';
+      if (score >= 60) return 'Good';
+      if (score >= 50) return 'Fair';
+      return 'Needs Improvement';
+    }
+  };
+
   const handleGenerateRecommendation = async (type: 'care' | 'breeding' | 'health') => {
     const currentResult = detectionResults[currentResultIndex];
     if (!currentResult) return;
@@ -346,21 +364,25 @@ export default function CamelDetection() {
         <div style="margin-bottom: 15px; background: ${headColor.bg}; padding: 15px; border-radius: 8px; border: 2px solid ${headColor.border};">
           <span style="font-size: 16px;">👤 ${t.detection.headBeauty}</span>
           <span style="float: left; font-size: 20px; color: ${headColor.text}; font-weight: bold;">${result.head_beauty_score.toFixed(1)}</span>
+          <div style="clear: both; margin-top: 5px; font-size: 14px; color: #666;">${getScoreGrade(result.head_beauty_score, 'ar')}</div>
         </div>
 
         <div style="margin-bottom: 15px; background: ${neckColor.bg}; padding: 15px; border-radius: 8px; border: 2px solid ${neckColor.border};">
           <span style="font-size: 16px;">🦒 ${t.detection.neckBeauty}</span>
           <span style="float: left; font-size: 20px; color: ${neckColor.text}; font-weight: bold;">${result.neck_beauty_score.toFixed(1)}</span>
+          <div style="clear: both; margin-top: 5px; font-size: 14px; color: #666;">${getScoreGrade(result.neck_beauty_score, 'ar')}</div>
         </div>
 
         <div style="margin-bottom: 15px; background: ${bodyColor.bg}; padding: 15px; border-radius: 8px; border: 2px solid ${bodyColor.border};">
           <span style="font-size: 16px;">🐪 ${t.detection.bodyHumpLimbs}</span>
           <span style="float: left; font-size: 20px; color: ${bodyColor.text}; font-weight: bold;">${result.body_hump_limbs_score.toFixed(1)}</span>
+          <div style="clear: both; margin-top: 5px; font-size: 14px; color: #666;">${getScoreGrade(result.body_hump_limbs_score, 'ar')}</div>
         </div>
 
         <div style="margin-bottom: 15px; background: ${sizeColor.bg}; padding: 15px; border-radius: 8px; border: 2px solid ${sizeColor.border};">
           <span style="font-size: 16px;">📏 ${t.detection.bodySize}</span>
           <span style="float: left; font-size: 20px; color: ${sizeColor.text}; font-weight: bold;">${result.body_size_score.toFixed(1)}</span>
+          <div style="clear: both; margin-top: 5px; font-size: 14px; color: #666;">${getScoreGrade(result.body_size_score, 'ar')}</div>
         </div>
 
         <h3 style="color: #654321; font-size: 18px; margin: 30px 0 15px;">${t.detection.pdf.quickStats}</h3>
@@ -375,6 +397,7 @@ export default function CamelDetection() {
               const max = Math.max(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score);
               return getScoreColor(max).text;
             })()}; font-size: 24px; font-weight: bold;">${Math.max(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score).toFixed(1)}</div>
+            <div style="color: #666; font-size: 12px; margin-top: 5px;">${getScoreGrade(Math.max(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score), 'ar')}</div>
           </div>
           <div style="flex: 1; background: ${(() => {
             const min = Math.min(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score);
@@ -385,6 +408,7 @@ export default function CamelDetection() {
               const min = Math.min(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score);
               return getScoreColor(min).text;
             })()}; font-size: 24px; font-weight: bold;">${Math.min(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score).toFixed(1)}</div>
+            <div style="color: #666; font-size: 12px; margin-top: 5px;">${getScoreGrade(Math.min(result.head_beauty_score, result.neck_beauty_score, result.body_hump_limbs_score, result.body_size_score), 'ar')}</div>
           </div>
         </div>
 
@@ -523,7 +547,7 @@ export default function CamelDetection() {
       ];
 
       scores.forEach((score, index) => {
-        const boxY = yPosition + (index * 20);
+        const boxY = yPosition + (index * 24);
         const scoreColor = getScoreColor(score.value);
 
         pdf.setFillColor(
@@ -531,18 +555,18 @@ export default function CamelDetection() {
           parseInt(scoreColor.bg.slice(3, 5), 16),
           parseInt(scoreColor.bg.slice(5, 7), 16)
         );
-        pdf.roundedRect(15, boxY, pageWidth - 30, 15, 2, 2, 'F');
+        pdf.roundedRect(15, boxY, pageWidth - 30, 20, 2, 2, 'F');
 
         pdf.setDrawColor(
           parseInt(scoreColor.border.slice(1, 3), 16),
           parseInt(scoreColor.border.slice(3, 5), 16),
           parseInt(scoreColor.border.slice(5, 7), 16)
         );
-        pdf.roundedRect(15, boxY, pageWidth - 30, 15, 2, 2, 'S');
+        pdf.roundedRect(15, boxY, pageWidth - 30, 20, 2, 2, 'S');
 
         pdf.setFontSize(11);
         pdf.setTextColor(101, 67, 33);
-        pdf.text(`${score.icon} ${score.label}`, 20, boxY + 10);
+        pdf.text(`${score.icon} ${score.label}`, 20, boxY + 8);
 
         pdf.setFontSize(14);
         pdf.setTextColor(
@@ -550,9 +574,13 @@ export default function CamelDetection() {
           parseInt(scoreColor.text.slice(3, 5), 16),
           parseInt(scoreColor.text.slice(5, 7), 16)
         );
-        pdf.text(score.value.toFixed(1), pageWidth - 25, boxY + 10, { align: 'right' });
+        pdf.text(score.value.toFixed(1), pageWidth - 25, boxY + 8, { align: 'right' });
+
+        pdf.setFontSize(9);
+        pdf.setTextColor(100, 100, 100);
+        pdf.text(getScoreGrade(score.value, language), 20, boxY + 16);
       });
-      yPosition += 90;
+      yPosition += 106;
 
       const maxScore = Math.max(
         result.head_beauty_score,
@@ -580,7 +608,7 @@ export default function CamelDetection() {
         parseInt(maxColor.bg.slice(3, 5), 16),
         parseInt(maxColor.bg.slice(5, 7), 16)
       );
-      pdf.roundedRect(15, yPosition, (pageWidth - 35) / 2, 20, 2, 2, 'F');
+      pdf.roundedRect(15, yPosition, (pageWidth - 35) / 2, 26, 2, 2, 'F');
       pdf.setFontSize(10);
       pdf.setTextColor(100, 100, 100);
       pdf.text(t.detection.pdf.highestScore, 20, yPosition + 8);
@@ -590,14 +618,17 @@ export default function CamelDetection() {
         parseInt(maxColor.text.slice(3, 5), 16),
         parseInt(maxColor.text.slice(5, 7), 16)
       );
-      pdf.text(maxScore.toFixed(1), 20, yPosition + 16);
+      pdf.text(maxScore.toFixed(1), 20, yPosition + 18);
+      pdf.setFontSize(8);
+      pdf.setTextColor(100, 100, 100);
+      pdf.text(getScoreGrade(maxScore, language), 20, yPosition + 24);
 
       pdf.setFillColor(
         parseInt(minColor.bg.slice(1, 3), 16),
         parseInt(minColor.bg.slice(3, 5), 16),
         parseInt(minColor.bg.slice(5, 7), 16)
       );
-      pdf.roundedRect((pageWidth / 2) + 2.5, yPosition, (pageWidth - 35) / 2, 20, 2, 2, 'F');
+      pdf.roundedRect((pageWidth / 2) + 2.5, yPosition, (pageWidth - 35) / 2, 26, 2, 2, 'F');
       pdf.setFontSize(10);
       pdf.setTextColor(100, 100, 100);
       pdf.text(t.detection.pdf.lowestScore, (pageWidth / 2) + 7.5, yPosition + 8);
@@ -607,7 +638,10 @@ export default function CamelDetection() {
         parseInt(minColor.text.slice(3, 5), 16),
         parseInt(minColor.text.slice(5, 7), 16)
       );
-      pdf.text(minScore.toFixed(1), (pageWidth / 2) + 7.5, yPosition + 16);
+      pdf.text(minScore.toFixed(1), (pageWidth / 2) + 7.5, yPosition + 18);
+      pdf.setFontSize(8);
+      pdf.setTextColor(100, 100, 100);
+      pdf.text(getScoreGrade(minScore, language), (pageWidth / 2) + 7.5, yPosition + 24);
 
       pdf.setFontSize(8);
       pdf.setTextColor(150, 150, 150);
