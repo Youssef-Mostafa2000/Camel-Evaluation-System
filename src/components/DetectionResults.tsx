@@ -99,7 +99,7 @@ export default function DetectionResults({
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-semibold text-brown-800 font-arabic">{t.detection.beautyScore}</h3>
                 <span className="text-5xl font-bold text-gold-600">
-                  {result.overall_score.toFixed(1)}
+                  {result.overall_score}
                 </span>
               </div>
               <StarRating score={result.overall_score} />
