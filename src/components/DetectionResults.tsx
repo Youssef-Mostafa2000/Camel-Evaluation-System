@@ -4,7 +4,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 interface DetectionResult {
   id?: string;
-  overall_score: integer;
+  overall_score: number;
   head_beauty_score: number;
   neck_beauty_score: number;
   body_hump_limbs_score: number;
@@ -97,7 +97,7 @@ export default function DetectionResults({
           <div className="space-y-6">
             <div className="bg-white rounded-xl p-6 shadow-md">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-semibold text-brown-800 font-arabic">{t.detection.beautyScore}</h3>
+                <h3 className="text-xl font-semibold text-brown-800 font-arabic">{Math.round(Number(t.detection.beautyScore))}</h3>
                 <span className="text-5xl font-bold text-gold-600">
                   {result.overall_score.toFixed(1)}
                 </span>
