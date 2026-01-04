@@ -124,7 +124,7 @@ export default function DetectionResults({
                       result.neck_beauty_score,
                       result.body_hump_limbs_score,
                       result.body_size_score
-                    ).toFixed(1)}
+                    )}
                   </p>
                 </div>
                 <div>
@@ -135,7 +135,7 @@ export default function DetectionResults({
                       result.neck_beauty_score,
                       result.body_hump_limbs_score,
                       result.body_size_score
-                    ).toFixed(1)}
+                    )}
                   </p>
                 </div>
               </div>
