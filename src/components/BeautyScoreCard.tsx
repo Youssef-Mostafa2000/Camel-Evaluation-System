@@ -14,7 +14,7 @@ export default function BeautyScoreCard({
   icon,
   color,
 }: BeautyScoreCardProps) {
-  const { t, language } = useLanguageuage();
+  const { t, language } = useLanguage();
   const getColor = (score: number) => {
     if (color) {
       return color;
