@@ -71,7 +71,7 @@ export default function BeautyScoreCard({ score, label, icon, color }: BeautySco
       <div className="mt-3 text-sm text-gray-600">
         {score >= 90 && 'Exceptional'}
         {score >= 80 && score < 90 && 'Excellent'}
-        {score >= 70 && score < 80 && 'Very Good'}
+        {score >= 70 && score < 80 && 'Very '}
         {score >= 60 && score < 70 && 'Good'}
         {score >= 50 && score < 60 && 'Fair'}
         {score < 50 && 'Needs Improvement'}
