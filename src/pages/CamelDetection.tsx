@@ -357,7 +357,7 @@ export default function CamelDetection() {
         <div style="background: ${result.category === 'beautiful' ? '#10B981' : '#EF4444'}; color: white; padding: 12px 20px; border-radius: 8px; display: inline-block; margin-bottom: 20px;">
           ${result.category === 'beautiful' ? '✨ ' + t.detection.beautiful : '⚠️ ' + t.detection.pdf.needsImprovement}
         </div>
-        <span style="margin-right: 20px; color: #666; font-size: 14px;">${t.detection.confidence}: ${result.confidence.toFixed(1)}%</span>
+        <span style="margin-right: 20px; color: #666; font-size: 14px;">${t.detection.confidence}: ${Math.round(result.confidence)}%</span>
 
         <h2 style="color: #654321; font-size: 20px; margin: 30px 0 15px;">${t.detection.pdf.detailedScores}</h2>
 
