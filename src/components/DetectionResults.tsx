@@ -109,7 +109,7 @@ export default function DetectionResults({
               </div>
 
               <div className="mt-4 text-sm text-gray-600 font-arabic">
-                <span className="font-medium">{t.detection.confidence}:</span> {result.confidence}%
+                <span className="font-medium">{t.detection.confidence}:</span> {Math.round(result.confidence)}%
               </div>
             </div>
 
