@@ -72,7 +72,7 @@ export default function ImageUploadZone({
     if (validFiles.length > 0) {
       const newFiles = [...selectedFiles, ...validFiles];
       setSelectedFiles(newFiles);
-      onFilesSelected(validFiles.map(f => f.file));
+      onFilesSelected(newFiles.map(f => f.file));
     }
   }, [selectedFiles, maxFiles, acceptedFormats, maxFileSize, onFilesSelected]);
 
@@ -105,15 +105,18 @@ export default function ImageUploadZone({
       if (file) {
         URL.revokeObjectURL(file.preview);
       }
-      return prev.filter(f => f.id !== id);
+      const updatedFiles = prev.filter(f => f.id !== id);
+      onFilesSelected(updatedFiles.map(f => f.file));
+      return updatedFiles;
     });
-  }, []);
+  }, [onFilesSelected]);
 
   const clearAll = useCallback(() => {
     selectedFiles.forEach(file => URL.revokeObjectURL(file.preview));
     setSelectedFiles([]);
     setError('');
-  }, [selectedFiles]);
+    onFilesSelected([]);
+  }, [selectedFiles, onFilesSelected]);
 
   return (
     <div className="w-full">
