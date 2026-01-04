@@ -363,7 +363,7 @@ export default function CamelDetection() {
 
         <div style="margin-bottom: 15px; background: ${headColor.bg}; padding: 15px; border-radius: 8px; border: 2px solid ${headColor.border};">
           <span style="font-size: 16px;">👤 ${t.detection.headBeauty}</span>
-          <span style="float: left; font-size: 20px; color: ${headColor.text}; font-weight: bold;">${result.head_beauty_score.toFixed(1)}</span>
+          <span style="float: left; font-size: 20px; color: ${headColor.text}; font-weight: bold;">${result.head_beauty_score}</span>
           <div style="clear: both; margin-top: 5px; font-size: 14px; color: #666;">${getScoreGrade(result.head_beauty_score, 'ar')}</div>
         </div>
 
