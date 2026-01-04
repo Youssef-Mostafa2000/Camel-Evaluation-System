@@ -509,7 +509,7 @@ export default function CamelDetection() {
       pdf.text(t.detection.pdf.overallScore, 20, yPosition + 12);
 
       pdf.setFontSize(32);
-      pdf.text(result.overall_score, pageWidth - 25, yPosition + 28, { align: 'right' });
+      pdf.text(String(result.overall_score), pageWidth - 25, yPosition + 28, { align: 'right' });
 
       const stars = Math.round((result.overall_score / 100) * 5);
       pdf.setFontSize(20);
@@ -531,7 +531,7 @@ export default function CamelDetection() {
 
       pdf.setFontSize(10);
       pdf.setTextColor(100, 100, 100);
-      pdf.text(`${t.detection.confidence}: ${Math.round(result.confidence)}%`, 100, yPosition + 8);
+      pdf.text(`${t.detection.confidence}: ${Math.round(result.confidence).toString()}%`, 100, yPosition + 8);
       yPosition += 25;
 
       pdf.setFontSize(14);
@@ -574,7 +574,7 @@ export default function CamelDetection() {
           parseInt(scoreColor.text.slice(3, 5), 16),
           parseInt(scoreColor.text.slice(5, 7), 16)
         );
-        pdf.text(score.value, pageWidth - 25, boxY + 8, { align: 'right' });
+        pdf.text(String(score.value), pageWidth - 25, boxY + 8, { align: 'right' });
 
         pdf.setFontSize(9);
         pdf.setTextColor(100, 100, 100);
@@ -618,7 +618,7 @@ export default function CamelDetection() {
         parseInt(maxColor.text.slice(3, 5), 16),
         parseInt(maxColor.text.slice(5, 7), 16)
       );
-      pdf.text(maxScore, 20, yPosition + 18);
+      pdf.text(String(maxScore), 20, yPosition + 18);
       pdf.setFontSize(8);
       pdf.setTextColor(100, 100, 100);
       pdf.text(getScoreGrade(maxScore, language), 20, yPosition + 24);
@@ -638,7 +638,7 @@ export default function CamelDetection() {
         parseInt(minColor.text.slice(3, 5), 16),
         parseInt(minColor.text.slice(5, 7), 16)
       );
-      pdf.text(minScore, (pageWidth / 2) + 7.5, yPosition + 18);
+      pdf.text(String(minScore), (pageWidth / 2) + 7.5, yPosition + 18);
       pdf.setFontSize(8);
       pdf.setTextColor(100, 100, 100);
       pdf.text(getScoreGrade(minScore, language), (pageWidth / 2) + 7.5, yPosition + 24);
