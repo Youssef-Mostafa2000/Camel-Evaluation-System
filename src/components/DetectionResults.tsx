@@ -1,5 +1,5 @@
 import { Download, Share2, Sparkles } from 'lucide-react';
-import { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import BeautyScoreCard, { StarRating } from './BeautyScoreCard';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -23,29 +23,16 @@ interface DetectionResultsProps {
   onShare?: () => void;
 }
 
-export interface DetectionResultsRef {
-  getProcessedImageUrl: () => string | null;
-}
-
-const DetectionResults = forwardRef<DetectionResultsRef, DetectionResultsProps>(({
+export default function DetectionResults({
   result,
   onGenerateRecommendation,
   onExport,
   onShare,
-}, ref) => {
+}: DetectionResultsProps) {
   const { t } = useLanguage();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const [imageLoaded, setImageLoaded] = useState(false);
-
-  useImperativeHandle(ref, () => ({
-    getProcessedImageUrl: () => {
-      if (canvasRef.current && result.bounding_boxes && result.bounding_boxes.length > 0) {
-        return canvasRef.current.toDataURL('image/png');
-      }
-      return null;
-    }
-  }));
 
   useEffect(() => {
     if (!imageLoaded || !canvasRef.current || !imageRef.current || !result.bounding_boxes || result.bounding_boxes.length === 0) {
@@ -238,8 +225,4 @@ const DetectionResults = forwardRef<DetectionResultsRef, DetectionResultsProps>(
       </div>
     </div>
   );
-});
-
-DetectionResults.displayName = 'DetectionResults';
-
-export default DetectionResults;
+}

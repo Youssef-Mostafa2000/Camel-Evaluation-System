@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Sparkles, Loader2 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -6,7 +6,7 @@ import { supabase } from "../lib/supabase";
 import { translations } from "../lib/translations";
 import { Layout } from "../components/Layout";
 import ImageUploadZone from "../components/ImageUploadZone";
-import DetectionResults, { DetectionResultsRef } from "../components/DetectionResults";
+import DetectionResults from "../components/DetectionResults";
 import RecommendationDisplay from "../components/RecommendationDisplay";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
@@ -27,7 +27,6 @@ interface DetectionResult {
 export default function CamelDetection() {
   const { user } = useAuth();
   const { t, language } = useLanguage();
-  const detectionResultsRef = useRef<DetectionResultsRef>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [processing, setProcessing] = useState(false);
   const [currentStep, setCurrentStep] = useState<
@@ -368,9 +367,6 @@ export default function CamelDetection() {
 
       if (i > 0) pdf.addPage();
 
-      const processedImageUrl = detectionResultsRef.current?.getProcessedImageUrl();
-      const imageToUse = processedImageUrl || result.image_url;
-
       // ---- Hidden container ----
       const container = document.createElement("div");
       container.style.position = "absolute";
@@ -416,7 +412,7 @@ export default function CamelDetection() {
         </div>
   
         <div style="display:flex; justify-content:center; margin-bottom:30px;">
-          <img src="${imageToUse}"
+          <img src="${result.image_url}"
                crossorigin="anonymous"
                style="max-width:400px; max-height:300px; border-radius:8px;" />
         </div>
@@ -738,7 +734,6 @@ export default function CamelDetection() {
               )}
 
               <DetectionResults
-                ref={detectionResultsRef}
                 result={detectionResults[currentResultIndex]}
                 onGenerateRecommendation={handleGenerateRecommendation}
                 onExport={handleExport}
