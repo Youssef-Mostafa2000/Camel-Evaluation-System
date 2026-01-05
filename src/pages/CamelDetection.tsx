@@ -718,7 +718,7 @@ export default function CamelDetection() {
                         key={result.id}
                         onClick={() => setCurrentResultIndex(idx)}
                         className={`
-                        aspect-square rounded-lg overflow-hidden border-2 transition-all
+                        relative aspect-square rounded-lg overflow-hidden border-2 transition-all
                         ${
                           idx === currentResultIndex
                             ? "border-gold-500 ring-2 ring-gold-200"
@@ -731,6 +731,12 @@ export default function CamelDetection() {
                           alt={`Result ${idx + 1}`}
                           className="w-full h-full object-cover"
                         />
+                        <div className="absolute top-1 left-1 bg-gold-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                          {idx + 1}
+                        </div>
+                        <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs font-semibold py-1 text-center">
+                          {Math.round(result.overall_score)}
+                        </div>
                       </button>
                     ))}
                   </div>
