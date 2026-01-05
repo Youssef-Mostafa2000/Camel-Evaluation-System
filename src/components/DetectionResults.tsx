@@ -1,4 +1,5 @@
 import { Download, Share2, Sparkles } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import BeautyScoreCard, { StarRating } from './BeautyScoreCard';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -29,6 +30,55 @@ export default function DetectionResults({
   onShare,
 }: DetectionResultsProps) {
   const { t } = useLanguage();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!imageLoaded || !canvasRef.current || !imageRef.current || !result.bounding_boxes || result.bounding_boxes.length === 0) {
+      return;
+    }
+
+    const canvas = canvasRef.current;
+    const img = imageRef.current;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+
+    ctx.drawImage(img, 0, 0);
+
+    result.bounding_boxes.forEach((box) => {
+      if (box.coords && Array.isArray(box.coords) && box.coords.length === 4) {
+        const [x1, y1, x2, y2] = box.coords;
+        const width = x2 - x1;
+        const height = y2 - y1;
+
+        ctx.strokeStyle = '#D4AF37';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(x1, y1, width, height);
+
+        ctx.fillStyle = 'rgba(212, 175, 55, 0.2)';
+        ctx.fillRect(x1, y1, width, height);
+
+        const label = box.type || 'Detected';
+        ctx.font = 'bold 24px Arial';
+        const textMetrics = ctx.measureText(label);
+        const textWidth = textMetrics.width;
+        const textHeight = 30;
+
+        const labelX = x1;
+        const labelY = y1 > textHeight + 10 ? y1 - 10 : y1 + height + textHeight + 10;
+
+        ctx.fillStyle = '#D4AF37';
+        ctx.fillRect(labelX, labelY - textHeight, textWidth + 20, textHeight + 10);
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillText(label, labelX + 10, labelY - 8);
+      }
+    });
+  }, [imageLoaded, result.bounding_boxes]);
 
   const getCategoryColor = (category: string) => {
     return category === 'beautiful' ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50';
@@ -66,31 +116,21 @@ export default function DetectionResults({
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 mb-8">
-          <div className="relative rounded-xl overflow-hidden shadow-lg">
+          <div className="relative rounded-xl overflow-hidden shadow-lg bg-sand-100">
             <img
+              ref={imageRef}
               src={result.image_url}
               alt="Camel"
               className="w-full h-full object-cover"
+              crossOrigin="anonymous"
+              onLoad={() => setImageLoaded(true)}
+              style={{ display: result.bounding_boxes && result.bounding_boxes.length > 0 ? 'none' : 'block' }}
             />
             {result.bounding_boxes && result.bounding_boxes.length > 0 && (
-              <div className="absolute inset-0 pointer-events-none">
-                {result.bounding_boxes.map((box, idx) => (
-                  <div
-                    key={idx}
-                    className="absolute border-2 border-gold-400"
-                    style={{
-                      left: `${box.x}px`,
-                      top: `${box.y}px`,
-                      width: `${box.width}px`,
-                      height: `${box.height}px`,
-                    }}
-                  >
-                    <span className="absolute -top-6 left-0 bg-gold-400 text-white text-xs px-2 py-1 rounded">
-                      {box.label}
-                    </span>
-                  </div>
-                ))}
-              </div>
+              <canvas
+                ref={canvasRef}
+                className="w-full h-full object-contain"
+              />
             )}
           </div>
 
