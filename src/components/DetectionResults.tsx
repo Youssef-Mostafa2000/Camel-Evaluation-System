@@ -62,7 +62,7 @@ export default function DetectionResults({
         ctx.fillStyle = 'rgba(212, 175, 55, 0.2)';
         ctx.fillRect(x1, y1, width, height);
 
-        const label = box.type || 'Detected';
+        const label = box.type === 'body' ? t.evaluations.body : (box.type || t.evaluations.body);
         ctx.font = 'bold 24px Arial';
         const textMetrics = ctx.measureText(label);
         const textWidth = textMetrics.width;
@@ -78,7 +78,7 @@ export default function DetectionResults({
         ctx.fillText(label, labelX + 10, labelY - 8);
       }
     });
-  }, [imageLoaded, result.bounding_boxes]);
+  }, [imageLoaded, result.bounding_boxes, t.evaluations.body]);
 
   const getCategoryColor = (category: string) => {
     return category === 'beautiful' ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50';
