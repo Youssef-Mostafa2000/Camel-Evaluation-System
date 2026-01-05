@@ -61,24 +61,9 @@ export default function DetectionResults({
 
         ctx.fillStyle = 'rgba(212, 175, 55, 0.2)';
         ctx.fillRect(x1, y1, width, height);
-
-        const label = box.type === 'body' ? t.evaluations.body : (box.type || t.evaluations.body);
-        ctx.font = 'bold 24px Arial';
-        const textMetrics = ctx.measureText(label);
-        const textWidth = textMetrics.width;
-        const textHeight = 30;
-
-        const labelX = x1;
-        const labelY = y1 > textHeight + 10 ? y1 - 10 : y1 + height + textHeight + 10;
-
-        ctx.fillStyle = '#D4AF37';
-        ctx.fillRect(labelX, labelY - textHeight, textWidth + 20, textHeight + 10);
-
-        ctx.fillStyle = '#FFFFFF';
-        ctx.fillText(label, labelX + 10, labelY - 8);
       }
     });
-  }, [imageLoaded, result.bounding_boxes, t.evaluations.body]);
+  }, [imageLoaded, result.bounding_boxes]);
 
   const getCategoryColor = (category: string) => {
     return category === 'beautiful' ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50';
