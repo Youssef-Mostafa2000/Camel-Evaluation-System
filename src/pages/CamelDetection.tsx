@@ -261,7 +261,11 @@ export default function CamelDetection() {
         });
       }
 
-      setDetectionResults(results);
+      const sortedResults = results.sort(
+        (a, b) => b.overall_score - a.overall_score
+      );
+
+      setDetectionResults(sortedResults);
       setCurrentStep("results");
       setCurrentResultIndex(0);
     } catch (err: any) {
