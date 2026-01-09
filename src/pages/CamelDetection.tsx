@@ -22,6 +22,12 @@ interface DetectionResult {
   confidence: number;
   image_url: string;
   bounding_boxes?: any[];
+  justifications?: {
+    head?: string;
+    neck?: string;
+    body_hump_limbs?: string;
+    body_size?: string;
+  };
 }
 
 export default function CamelDetection() {
@@ -41,6 +47,7 @@ export default function CamelDetection() {
     type: "care" | "breeding" | "health";
   } | null>(null);
   const [loadingRecommendation, setLoadingRecommendation] = useState(false);
+  const [loadingJustification, setLoadingJustification] = useState(false);
   const [error, setError] = useState<string>("");
 
   const handleFilesSelected = (files: File[]) => {
@@ -161,11 +168,13 @@ export default function CamelDetection() {
 
     try {
       const results: DetectionResult[] = [];
+      const fileMap = new Map<string, File>();
 
       if (selectedFiles.length === 1) {
         const file = selectedFiles[0];
         const imageUrl = await uploadImageToStorage(file);
         const result = await detectCamelBeauty(file, imageUrl);
+        fileMap.set(result.id, file);
         results.push(result);
       } else {
         const apiUrl = `${
@@ -232,6 +241,7 @@ export default function CamelDetection() {
               : [],
           };
 
+          fileMap.set(result.id, selectedFiles[index]);
           results.push(result);
 
           if (user) {
@@ -268,6 +278,22 @@ export default function CamelDetection() {
       setDetectionResults(sortedResults);
       setCurrentStep("results");
       setCurrentResultIndex(0);
+
+      setLoadingJustification(true);
+      try {
+        for (const result of sortedResults) {
+          const file = fileMap.get(result.id);
+          if (file) {
+            const justifications = await fetchJustifications(file, result);
+            result.justifications = justifications;
+          }
+        }
+        setDetectionResults([...sortedResults]);
+      } catch (justErr) {
+        console.error("Justification error:", justErr);
+      } finally {
+        setLoadingJustification(false);
+      }
     } catch (err: any) {
       console.error("Detection error:", err);
       setError(err.message || t.detection.errors.processingFailed);
@@ -301,6 +327,83 @@ export default function CamelDetection() {
       if (score >= 50) return "Fair";
       return "Needs Improvement";
     }
+  };
+
+  const fetchJustifications = async (
+    file: File,
+    result: DetectionResult
+  ): Promise<{
+    head: string;
+    neck: string;
+    body_hump_limbs: string;
+    body_size: string;
+  }> => {
+    const promptTemplate =
+      language === "ar"
+        ? `بشكل مختصر اريد تبرير لماذا حصل الجمل على هذه التقييمات وتعليقات جمالية على اربع نقاط بناء على معايير جمال مسابقات الخليج
+الراس : ${result.head_beauty_score}
+الرقبة : ${result.neck_beauty_score}
+السنام والجسم : ${result.body_hump_limbs_score}
+حجم الجسم والاطراف : ${result.body_size_score}
+التقييم الاجمالي : ${result.overall_score}
+
+يرجى الرد بصيغة JSON بهذا الشكل:
+{
+  "head": "تبرير درجة الرأس",
+  "neck": "تبرير درجة الرقبة",
+  "body_hump_limbs": "تبرير درجة السنام والجسم",
+  "body_size": "تبرير درجة حجم الجسم والأطراف"
+}`
+        : `Please provide brief justification for why this camel received these beauty scores based on Gulf competition beauty standards:
+Head: ${result.head_beauty_score}
+Neck: ${result.neck_beauty_score}
+Body & Hump: ${result.body_hump_limbs_score}
+Body Size & Limbs: ${result.body_size_score}
+Overall Score: ${result.overall_score}
+
+Please respond in JSON format like this:
+{
+  "head": "justification for head score",
+  "neck": "justification for neck score",
+  "body_hump_limbs": "justification for body and hump score",
+  "body_size": "justification for body size and limbs score"
+}`;
+
+    const formData = new FormData();
+    formData.append("image", file);
+    formData.append("text", promptTemplate);
+
+    const response = await fetch("https://j9hqcg-5000.csb.app/chat", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch justifications");
+    }
+
+    const data = await response.json();
+
+    let justifications;
+    if (typeof data === "string") {
+      const jsonMatch = data.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        justifications = JSON.parse(jsonMatch[0]);
+      } else {
+        throw new Error("Invalid justification response format");
+      }
+    } else if (data.response) {
+      const jsonMatch = data.response.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        justifications = JSON.parse(jsonMatch[0]);
+      } else {
+        throw new Error("Invalid justification response format");
+      }
+    } else {
+      justifications = data;
+    }
+
+    return justifications;
   };
 
   const handleGenerateRecommendation = async (
@@ -747,6 +850,7 @@ export default function CamelDetection() {
                 result={detectionResults[currentResultIndex]}
                 onGenerateRecommendation={handleGenerateRecommendation}
                 onExport={handleExport}
+                loadingJustification={loadingJustification}
               />
 
               {loadingRecommendation && (

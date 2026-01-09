@@ -6,6 +6,8 @@ interface BeautyScoreCardProps {
   label: string;
   icon?: React.ReactNode;
   color?: "red" | "yellow" | "green";
+  justification?: string;
+  loading?: boolean;
 }
 
 export default function BeautyScoreCard({
@@ -13,6 +15,8 @@ export default function BeautyScoreCard({
   label,
   icon,
   color,
+  justification,
+  loading = false,
 }: BeautyScoreCardProps) {
   const { t, language } = useLanguage();
   const getColor = (score: number) => {
@@ -87,6 +91,26 @@ export default function BeautyScoreCard({
         {score >= 50 && score < 60 && t.detection.grades.fair}
         {score < 50 && t.detection.grades.needsImprovement}
       </div>
+
+      {(loading || justification) && (
+        <div className="mt-4 pt-4 border-t border-gray-200">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-xs font-semibold text-gray-700">
+              {t.detection.aiAnalysis}
+            </span>
+          </div>
+          {loading ? (
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              <div className="w-4 h-4 border-2 border-gold-500 border-t-transparent rounded-full animate-spin" />
+              <span>{t.detection.loadingJustification}</span>
+            </div>
+          ) : (
+            <p className="text-sm text-gray-700 leading-relaxed" style={{ direction: language === 'ar' ? 'rtl' : 'ltr' }}>
+              {justification}
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 }

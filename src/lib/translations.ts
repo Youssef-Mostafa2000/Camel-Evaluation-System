@@ -306,6 +306,9 @@ export const translations = {
         fair: "مقبول",
         needsImprovement: "يحتاج تحسين",
       },
+      justification: "التبرير",
+      loadingJustification: "جاري توليد التبرير...",
+      aiAnalysis: "تحليل الذكاء الاصطناعي",
     },
     common: {
       loading: "جاري التحميل...",
@@ -633,6 +636,9 @@ export const translations = {
         fair: "Fair",
         needsImprovement: "Needs Improvement",
       },
+      justification: "Justification",
+      loadingJustification: "Generating justification...",
+      aiAnalysis: "AI Analysis",
     },
     common: {
       loading: "Loading...",

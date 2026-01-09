@@ -13,6 +13,12 @@ interface DetectionResult {
   confidence: number;
   image_url: string;
   bounding_boxes?: any[];
+  justifications?: {
+    head?: string;
+    neck?: string;
+    body_hump_limbs?: string;
+    body_size?: string;
+  };
 }
 
 interface DetectionResultsProps {
@@ -20,6 +26,7 @@ interface DetectionResultsProps {
   onGenerateRecommendation?: (type: 'care' | 'breeding' | 'health') => void;
   onExport?: (format: 'pdf' | 'json' | 'png') => void;
   onShare?: () => void;
+  loadingJustification?: boolean;
 }
 
 export default function DetectionResults({
@@ -27,6 +34,7 @@ export default function DetectionResults({
   onGenerateRecommendation,
   onExport,
   onShare,
+  loadingJustification = false,
 }: DetectionResultsProps) {
   const { t } = useLanguage();
 
@@ -129,21 +137,29 @@ export default function DetectionResults({
             score={result.head_beauty_score}
             label={t.detection.headBeauty}
             icon={<span className="text-lg">👤</span>}
+            justification={result.justifications?.head}
+            loading={loadingJustification}
           />
           <BeautyScoreCard
             score={result.neck_beauty_score}
             label={t.detection.neckBeauty}
             icon={<span className="text-lg">🦒</span>}
+            justification={result.justifications?.neck}
+            loading={loadingJustification}
           />
           <BeautyScoreCard
             score={result.body_hump_limbs_score}
             label={t.detection.bodyHumpLimbs}
             icon={<span className="text-lg">🐪</span>}
+            justification={result.justifications?.body_hump_limbs}
+            loading={loadingJustification}
           />
           <BeautyScoreCard
             score={result.body_size_score}
             label={t.detection.bodySize}
             icon={<span className="text-lg">📏</span>}
+            justification={result.justifications?.body_size}
+            loading={loadingJustification}
           />
         </div>
 
