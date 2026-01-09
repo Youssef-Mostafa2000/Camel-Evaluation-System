@@ -371,7 +371,7 @@ Please respond in JSON format like this:
 
     const formData = new FormData();
     formData.append("image", file);
-    formData.append("text", promptTemplate);
+    formData.append("prompt", promptTemplate);
 
     const response = await fetch("https://j9hqcg-5000.csb.app/chat", {
       method: "POST",
