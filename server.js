@@ -68,7 +68,14 @@ app.post("/chat", upload.single("image"), async (req, res) => {
     // Delete uploaded image
     fs.unlinkSync(imageFile.path);
 
-    const result = JSON.parse(response.choices[0].message.content);
+    const content = response.choices[0].message.content;
+
+    const cleaned = content
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
+
+    const result = JSON.parse(cleaned);
     res.json(result);
   } catch (error) {
     console.error(error);
