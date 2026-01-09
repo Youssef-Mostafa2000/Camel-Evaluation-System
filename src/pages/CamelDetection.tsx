@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Sparkles, Loader2 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -49,6 +49,8 @@ export default function CamelDetection() {
   const [loadingRecommendation, setLoadingRecommendation] = useState(false);
   const [loadingJustification, setLoadingJustification] = useState(false);
   const [error, setError] = useState<string>("");
+  const [fileResultMap, setFileResultMap] = useState<Map<string, File>>(new Map());
+  const [justificationLanguage, setJustificationLanguage] = useState<"ar" | "en">(language);
 
   const handleFilesSelected = (files: File[]) => {
     setSelectedFiles(files);
@@ -278,6 +280,8 @@ export default function CamelDetection() {
       setDetectionResults(sortedResults);
       setCurrentStep("results");
       setCurrentResultIndex(0);
+      setFileResultMap(fileMap);
+      setJustificationLanguage(language);
 
       setLoadingJustification(true);
       try {
@@ -384,6 +388,8 @@ Please respond in JSON format like this:
 
     const data = await response.json();
 
+    console.log(data);
+
     let justifications;
     if (typeof data === "string") {
       const jsonMatch = data.match(/\{[\s\S]*\}/);
@@ -405,6 +411,39 @@ Please respond in JSON format like this:
 
     return justifications;
   };
+
+  const refetchJustifications = async () => {
+    if (detectionResults.length === 0 || fileResultMap.size === 0) return;
+
+    setLoadingJustification(true);
+    try {
+      const updatedResults = [...detectionResults];
+      for (const result of updatedResults) {
+        const file = fileResultMap.get(result.id);
+        if (file) {
+          const justifications = await fetchJustifications(file, result);
+          result.justifications = justifications;
+        }
+      }
+      setDetectionResults(updatedResults);
+      setJustificationLanguage(language);
+    } catch (err) {
+      console.error("Error re-fetching justifications:", err);
+    } finally {
+      setLoadingJustification(false);
+    }
+  };
+
+  React.useEffect(() => {
+    if (
+      currentStep === "results" &&
+      detectionResults.length > 0 &&
+      justificationLanguage !== language &&
+      fileResultMap.size > 0
+    ) {
+      refetchJustifications();
+    }
+  }, [language, currentStep]);
 
   const handleGenerateRecommendation = async (
     type: "care" | "breeding" | "health"
@@ -601,7 +640,10 @@ Please respond in JSON format like this:
           },
         ]
           .map(
-            (s) => `
+            (s, idx) => {
+              const justificationKey = ['head', 'neck', 'body_hump_limbs', 'body_size'][idx];
+              const justification = result.justifications?.[justificationKey as keyof typeof result.justifications];
+              return `
           <div style="
             margin-bottom:15px;
             background:${s.color.bg};
@@ -623,8 +665,24 @@ Please respond in JSON format like this:
             <div style="clear:both; margin-top: 5px; font-size:14px; color:#666;">
               ${getScoreGrade(s.value, language)}
             </div>
+            ${justification ? `
+              <div style="
+                margin-top:10px;
+                padding-top:10px;
+                border-top:1px solid #ddd;
+                font-size:12px;
+                color:#555;
+                line-height:1.5;
+                direction:${direction};
+                text-align:${isArabic ? 'right' : 'left'};
+              ">
+                <strong>${t.detection.aiAnalysis}:</strong><br/>
+                ${justification}
+              </div>
+            ` : ''}
           </div>
-        `
+        `;
+            }
           )
           .join("")}
   
