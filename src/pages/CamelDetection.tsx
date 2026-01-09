@@ -49,8 +49,12 @@ export default function CamelDetection() {
   const [loadingRecommendation, setLoadingRecommendation] = useState(false);
   const [loadingJustification, setLoadingJustification] = useState(false);
   const [error, setError] = useState<string>("");
-  const [fileResultMap, setFileResultMap] = useState<Map<string, File>>(new Map());
-  const [justificationLanguage, setJustificationLanguage] = useState<"ar" | "en">(language);
+  const [fileResultMap, setFileResultMap] = useState<Map<string, File>>(
+    new Map()
+  );
+  const [justificationLanguage, setJustificationLanguage] = useState<
+    "ar" | "en"
+  >(language);
 
   const handleFilesSelected = (files: File[]) => {
     setSelectedFiles(files);
@@ -377,7 +381,7 @@ Please respond in JSON format like this:
     formData.append("image", file);
     formData.append("prompt", promptTemplate);
 
-    const response = await fetch("https://j9hqcg-5000.csb.app/chat", {
+    const response = await fetch("/api/justify", {
       method: "POST",
       body: formData,
     });
@@ -639,11 +643,18 @@ Please respond in JSON format like this:
             color: sizeColor,
           },
         ]
-          .map(
-            (s, idx) => {
-              const justificationKey = ['head', 'neck', 'body_hump_limbs', 'body_size'][idx];
-              const justification = result.justifications?.[justificationKey as keyof typeof result.justifications];
-              return `
+          .map((s, idx) => {
+            const justificationKey = [
+              "head",
+              "neck",
+              "body_hump_limbs",
+              "body_size",
+            ][idx];
+            const justification =
+              result.justifications?.[
+                justificationKey as keyof typeof result.justifications
+              ];
+            return `
           <div style="
             margin-bottom:15px;
             background:${s.color.bg};
@@ -665,7 +676,9 @@ Please respond in JSON format like this:
             <div style="clear:both; margin-top: 5px; font-size:14px; color:#666;">
               ${getScoreGrade(s.value, language)}
             </div>
-            ${justification ? `
+            ${
+              justification
+                ? `
               <div style="
                 margin-top:10px;
                 padding-top:10px;
@@ -674,16 +687,17 @@ Please respond in JSON format like this:
                 color:#555;
                 line-height:1.5;
                 direction:${direction};
-                text-align:${isArabic ? 'right' : 'left'};
+                text-align:${isArabic ? "right" : "left"};
               ">
                 <strong>${t.detection.aiAnalysis}:</strong><br/>
                 ${justification}
               </div>
-            ` : ''}
+            `
+                : ""
+            }
           </div>
         `;
-            }
-          )
+          })
           .join("")}
   
         <h3 style="color:#654321; font-size: 18px; margin:30px 0 15px;">
