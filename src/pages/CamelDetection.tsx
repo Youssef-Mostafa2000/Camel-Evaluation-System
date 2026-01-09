@@ -384,6 +384,8 @@ Please respond in JSON format like this:
 
     const data = await response.json();
 
+    console.log(data);
+
     let justifications;
     if (typeof data === "string") {
       const jsonMatch = data.match(/\{[\s\S]*\}/);
