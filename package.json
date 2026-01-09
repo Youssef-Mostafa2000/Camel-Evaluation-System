@@ -13,9 +13,17 @@
   "dependencies": {
     "@headlessui/react": "^2.2.9",
     "@supabase/supabase-js": "^2.57.4",
+    "axios": "^1.13.2",
+    "body-parse": "^0.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "fs": "^0.0.1-security",
     "html2canvas": "^1.4.1",
     "jspdf": "^4.0.0",
     "lucide-react": "^0.344.0",
+    "multer": "^2.0.2",
+    "openai": "^6.15.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.11.0"
