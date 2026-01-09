@@ -21,7 +21,7 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max
 });
 
-app.post("/chat", async (req, res) => {
+app.post("/chat", upload.single("image"), async (req, res) => {
   try {
     const { prompt } = req.body;
     const imageFile = req.file;
