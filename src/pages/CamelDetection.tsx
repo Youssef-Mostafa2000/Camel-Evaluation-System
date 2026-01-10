@@ -406,7 +406,7 @@ Please respond in JSON format like this:
     const response = await fetch("/api/justify", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ promptTemplate, imageBase64 }),
+      body: JSON.stringify({ prompt: promptTemplate, imageBase64 }),
       //body: formData,
     });
 
