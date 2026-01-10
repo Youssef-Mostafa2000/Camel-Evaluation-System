@@ -98,6 +98,14 @@ You are a professional camel beauty judge.
 Return ONLY valid JSON.
 No markdown, no code fences.
 Consider: head, neck, body/hump/limbs, body size.
+Note that the given scores is out of 100.
+Score mapping : 
+more than or equal 90 ==> exceptional
+more than or equal 80 ==> excellent
+more than or equal 70 ==> very good
+more than or equal 60 ==> good
+more than or equal 50 ==> fair
+less than 50 ==> bad
           `,
         },
         {

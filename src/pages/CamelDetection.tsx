@@ -371,11 +371,11 @@ export default function CamelDetection() {
     const promptTemplate =
       language === "ar"
         ? `بشكل مختصر اريد تبرير لماذا حصل الجمل على هذه التقييمات وتعليقات جمالية على اربع نقاط بناء على معايير جمال مسابقات الخليج
-الراس : ${result.head_beauty_score}
-الرقبة : ${result.neck_beauty_score}
-السنام والجسم : ${result.body_hump_limbs_score}
-حجم الجسم والاطراف : ${result.body_size_score}
-التقييم الاجمالي : ${result.overall_score}
+الراس : ${result.head_beauty_score} من أصل 100
+الرقبة : ${result.neck_beauty_score} من أصل 100
+السنام والجسم : ${result.body_hump_limbs_score} من أصل 100
+حجم الجسم والاطراف : ${result.body_size_score} من أصل 100
+التقييم الاجمالي : ${result.overall_score} من أصل 100
 
 يرجى الرد بصيغة JSON بهذا الشكل:
 {
@@ -385,11 +385,11 @@ export default function CamelDetection() {
   "body_size": "تبرير درجة حجم الجسم والأطراف"
 }`
         : `Please provide brief justification for why this camel received these beauty scores based on Gulf competition beauty standards:
-Head: ${result.head_beauty_score}
-Neck: ${result.neck_beauty_score}
-Body & Hump: ${result.body_hump_limbs_score}
-Body Size & Limbs: ${result.body_size_score}
-Overall Score: ${result.overall_score}
+Head: ${result.head_beauty_score} out of 100
+Neck: ${result.neck_beauty_score} out of 100
+Body & Hump: ${result.body_hump_limbs_score} out of 100
+Body Size & Limbs: ${result.body_size_score} out of 100
+Overall Score: ${result.overall_score} out of 100
 
 Please respond in JSON format like this:
 {
