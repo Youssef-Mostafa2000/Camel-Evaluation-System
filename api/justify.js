@@ -1,8 +1,8 @@
 //import dotenv from "dotenv";
 //dotenv.config();
 import OpenAI from "openai";
-import fs from "fs";
-import formidable from "formidable";
+//import fs from "fs";
+//import formidable from "formidable";
 
 // Disable Vercel's default body parsing
 export const config = {
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const form = new formidable.IncomingForm({ multiples: false });
+    /*const form = new formidable.IncomingForm({ multiples: false });
     form.parse(req, async (err, fields, files) => {
       if (err) return res.status(500).json({ error: "Form parse failed" });
 
@@ -74,9 +74,55 @@ Consider: head, neck, body/hump/limbs, body size.
 
       const result = JSON.parse(cleaned);
       res.status(200).json(result);
+    });*/
+
+    const { prompt, imageBase64 } = req.body;
+
+    if (!prompt || !imageBase64) {
+      return res.status(400).json({
+        error: "prompt and imageBase64 are required",
+      });
+    }
+
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
     });
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content: `
+You are a professional camel beauty judge.
+Return ONLY valid JSON.
+No markdown, no code fences.
+Consider: head, neck, body/hump/limbs, body size.
+          `,
+        },
+        {
+          role: "user",
+          content: [
+            { type: "text", text: prompt },
+            {
+              type: "image_url",
+              image_url: { url: `data:image/jpeg;base64,${imageBase64}` },
+            },
+          ],
+        },
+      ],
+      max_tokens: 300,
+    });
+
+    const content = response.choices[0].message.content;
+    const cleaned = content
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
+    const result = JSON.parse(cleaned);
+    return res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Camel analysis failed" });
+    return res.status(500).json({ error: "Camel analysis failed" });
   }
 }

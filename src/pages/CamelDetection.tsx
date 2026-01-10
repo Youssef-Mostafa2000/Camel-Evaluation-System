@@ -337,6 +337,28 @@ export default function CamelDetection() {
     }
   };
 
+  const fileToBase64 = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result !== "string") {
+          reject(new Error("Failed to read file as base64 string"));
+          return;
+        }
+        const base64 = reader.result.split(",")[1]!;
+        if (!base64) {
+          reject(new Error("Invalid base64 format"));
+          return;
+        }
+        resolve(base64);
+      };
+
+      reader.onerror = () => {
+        reject(new Error("FileReader error"));
+      };
+      reader.readAsDataURL(file);
+    });
+
   const fetchJustifications = async (
     file: File,
     result: DetectionResult
@@ -377,13 +399,15 @@ Please respond in JSON format like this:
   "body_size": "justification for body size and limbs score"
 }`;
 
-    const formData = new FormData();
+    /*const formData = new FormData();
     formData.append("image", file);
-    formData.append("prompt", promptTemplate);
-
+    formData.append("prompt", promptTemplate);*/
+    const imageBase64 = await fileToBase64(file);
     const response = await fetch("/api/justify", {
       method: "POST",
-      body: formData,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ promptTemplate, imageBase64 }),
+      //body: formData,
     });
 
     if (!response.ok) {
